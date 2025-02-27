@@ -23,4 +23,5 @@ body {
 
 .login.logout-card a.nav-link {
     text-align: center;
+    color: black;
 }

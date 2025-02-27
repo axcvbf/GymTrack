@@ -7,11 +7,19 @@ var connectionString = builder.Configuration.GetConnectionString("GymDbContextCo
 
 builder.Services.AddDbContext<GymDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<GymDbContext>();
+builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GymDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+});
 
 var app = builder.Build();
 
