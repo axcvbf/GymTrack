@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.login.logout-card a.nav-link {
+    text-align: center;
+}
