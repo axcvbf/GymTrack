@@ -1,8 +1,4 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
+@media (min-width: 100%) {
   html {
     font-size: 16px;
   }
@@ -17,11 +13,46 @@ html {
   min-height: 100%;
 }
 
+
+
 body {
   margin-bottom: 60px;
+
+}
+
+header {
+    background-color: #101820;
+    color: white;
+}
+
+.footer {
+    background-color: #101820;
+    color: white;
 }
 
 .login.logout-card a.nav-link {
     text-align: center;
-    color: black;
+    color: white;
+}
+
+.calendar {
+    height: 100%;
+    width: 100%;
+}
+
+.container {
+    padding-right: 0px;
+    padding-left: 0px;
+    min-height: 100%;
+    min-width: 100%;
+    background-color: #FEE715;
+}
+
+.navbar-brand, .nav-link {
+    color: white !important
+}
+
+.weekdays {
+    margin-left: 5px;
+    margin-right: 5px;
 }
