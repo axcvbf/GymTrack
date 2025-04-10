@@ -1,23 +1,18 @@
-@media (min-width: 100%) {
-  html {
-    font-size: 16px;
-  }
+main {
+    min-height: 100%;
+    min-width: 100%;
 }
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-
 
 body {
-  margin-bottom: 60px;
-
+    min-height: 100%;
+    min-width: 100%;
+}
+.container {
+    background-color: #FEE715;
+    padding-right: 0px;
+    padding-left: 0px;
+    min-height: 100%;
+    min-width: 100%;
 }
 
 header {
@@ -25,34 +20,53 @@ header {
     color: white;
 }
 
-.footer {
+footer {
+    display: flex;
+    justify-content: space-between;
     background-color: #101820;
     color: white;
-}
-
-.login.logout-card a.nav-link {
-    text-align: center;
-    color: white;
-}
-
-.calendar {
-    height: 100%;
-    width: 100%;
-}
-
-.container {
-    padding-right: 0px;
-    padding-left: 0px;
-    min-height: 100%;
-    min-width: 100%;
-    background-color: #FEE715;
 }
 
 .navbar-brand, .nav-link {
     color: white !important
 }
 
-.weekdays {
-    margin-left: 5px;
-    margin-right: 5px;
+.container .calendar .month{
+    display: flex;
+    justify-content: center;
+}
+
+.weekdays{
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: repeat(4,1fr);
+    text-align: center;
+    gap: 10px;
+    flex: 1;
+    color: white;
+}
+
+    .days div {
+        background-color: #101820;
+        border: 1px solid;
+        min-height: 70px;
+        font-size: 50px;
+    }
+
+.calendar {
+    height: 100vh;
+}
+
+.month{
+    font-size: 25px;
+}
+
+.empty {
+    background-color: #FEE715 !IMPORTANT;
 }

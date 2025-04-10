@@ -1,15 +1,28 @@
-﻿@{
+﻿@using System.Globalization
+@{
     ViewData["Title"] = "Calendar";
+
+    var month = ViewBag.Month;
+    int daysInMonth = DateTime.DaysInMonth(month.Year, month.Month);
+    int startDay = (int)month.DayOfWeek;
+
+    startDay = startDay == 0 ? 6 : startDay - 1;
 }
 
 <div class="container">
     <div class="calendar">
-        <div class="month d-flex justify-content-center">
-            <i class="fa fa-angle-left prev"></i>
-            <div class="date">March 2025</div>
-            <i class="fa fa-angle-right next"></i>
+        <div class="month">
+            <a href="?month=@(ViewBag.Month.AddMonths(-1).Month)&year=@(ViewBag.Month.AddMonths(-1).Year)">
+                <i class="fa fa-angle-left prev"></i>
+            </a>
+            <div class="date">
+                <h2>@(ViewBag.Month.ToString("MMMM yyyy", new CultureInfo("en-US")))</h2>
+            </div>
+            <a href="?month=@(ViewBag.Month.AddMonths(1).Month)&year=@(ViewBag.Month.AddMonths(1).Year)">
+                <i class="fa fa-angle-right next"></i>
+            </a>
         </div>
-        <div class="weekdays d-flex justify-content-center">
+        <div class="weekdays">
             <div>Monday</div>
             <div>Tuesday</div>
             <div>Wednesday</div>
@@ -17,6 +30,16 @@
             <div>Friday</div>
             <div>Saturday</div>
             <div>Sunday</div>
+        </div>
+        <div class="days">
+            @for(int i=0; i < startDay; i++)
+            {
+                <div class="empty"></div>
+            }
+            @for (int day = 1; day <= daysInMonth; day++)
+            {
+                <div>@day</div>
+            }
         </div>
     </div>
 </div>

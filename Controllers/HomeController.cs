@@ -22,6 +22,13 @@ namespace GymTrack.Controllers
         public IActionResult Index()
         {
             ViewData["UserID"] = _userManager.GetUserId(this.User);
+
+            int month = Request.Query["month"].Count > 0 ? int.Parse(Request.Query["month"]) : DateTime.Now.Month;
+            int year = Request.Query["year"].Count > 0 ? int.Parse(Request.Query["year"]) : DateTime.Now.Year;
+
+            DateTime currentMonth = new DateTime(year, month, 1);
+
+            ViewBag.Month = currentMonth;
             return View();
         }
 
