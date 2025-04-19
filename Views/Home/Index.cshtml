@@ -38,8 +38,33 @@
             }
             @for (int day = 1; day <= daysInMonth; day++)
             {
-                <div>@day</div>
+                var fullDate = new DateTime(month.Year, month.Month, day).ToString("yyyy-MM-dd");   
+                <div class="day" data-date="@fullDate">@day</div>
             }
+        </div>
+
+        <div id="trainingModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="selectedDate"></span>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+            <script>
+                document.querySelectorAll('.day').forEach(day => {
+                    day.addEventListener('click', () => {
+                        const date = day.dataset.date;
+                        document.getElementById('selectedDate').innerText = date;
+                        document.getElementById('trainingModal').style.display = 'flex';
+                    });
+                });
+
+                document.querySelector('.close').addEventListener('click', () => {
+                    document.getElementById('trainingModal').style.display = 'none';
+                });
+
+            </script>
+}

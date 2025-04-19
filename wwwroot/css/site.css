@@ -1,14 +1,28 @@
+.card {
+    max-width: 40%;
+}
+
+#login-submit {
+    background-color: black;
+}
+.aaa {
+    min-height: 100%;
+    min-width: 100%;
+    align-content: center;
+}
+
 main {
+    background-color: #fff000;
     min-height: 100%;
     min-width: 100%;
 }
 
-body {
-    min-height: 100%;
+html, body {
+    height: calc(100% - 56px)!important;
     min-width: 100%;
 }
 .container {
-    background-color: #FEE715;
+    background-color: #FFF000;
     padding-right: 0px;
     padding-left: 0px;
     min-height: 100%;
@@ -16,14 +30,14 @@ body {
 }
 
 header {
-    background-color: #101820;
+    background-color: #000000;
     color: white;
 }
 
 footer {
     display: flex;
     justify-content: space-between;
-    background-color: #101820;
+    background-color: #000000;
     color: white;
 }
 
@@ -53,20 +67,33 @@ footer {
 }
 
     .days div {
-        background-color: #101820;
+        background-color: #000000;
         border: 1px solid;
-        min-height: 70px;
+        min-height: 100px;
         font-size: 50px;
     }
-
-.calendar {
-    height: 100vh;
-}
 
 .month{
     font-size: 25px;
 }
 
 .empty {
-    background-color: #FEE715 !IMPORTANT;
+    background-color: #FFF000 !IMPORTANT
+}
+
+.modal {
+    position: fixed;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.modal-content {
+    background-color: black;
+    color: white;
+    width: 50%;
+    height: 50%;
 }
