@@ -38,8 +38,11 @@
             }
             @for (int day = 1; day <= daysInMonth; day++)
             {
-                var fullDate = new DateTime(month.Year, month.Month, day).ToString("yyyy-MM-dd");   
-                <div class="day" data-date="@fullDate">@day</div>
+                var currentDate = new DateTime(month.Year, month.Month, day);
+                var fullDate = currentDate.ToString("yyyy-MM-dd");
+                var isToday = currentDate == DateTime.Today ? " today" : "";
+
+                <div class="day@(isToday)" data-date="@fullDate">@day</div>
             }
         </div>
 
