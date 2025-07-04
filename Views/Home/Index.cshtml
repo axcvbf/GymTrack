@@ -9,48 +9,46 @@
     startDay = startDay == 0 ? 6 : startDay - 1;
 }
 
-<div class="container">
-    <div class="calendar">
-        <div class="month">
-            <a href="?month=@(ViewBag.Month.AddMonths(-1).Month)&year=@(ViewBag.Month.AddMonths(-1).Year)">
-                <i class="fa fa-angle-left prev"></i>
-            </a>
-            <div class="date">
-                <h2>@(ViewBag.Month.ToString("MMMM yyyy", new CultureInfo("en-US")))</h2>
-            </div>
-            <a href="?month=@(ViewBag.Month.AddMonths(1).Month)&year=@(ViewBag.Month.AddMonths(1).Year)">
-                <i class="fa fa-angle-right next"></i>
-            </a>
+<div class="calendar">
+    <div class="month">
+        <a href="?month=@(ViewBag.Month.AddMonths(-1).Month)&year=@(ViewBag.Month.AddMonths(-1).Year)">
+            <i class="fa fa-angle-left prev"></i>
+        </a>
+        <div class="date">
+            <h2>@(ViewBag.Month.ToString("MMMM yyyy", new CultureInfo("en-US")))</h2>
         </div>
-        <div class="weekdays">
-            <div>Monday</div>
-            <div>Tuesday</div>
-            <div>Wednesday</div>
-            <div>Thursday</div>
-            <div>Friday</div>
-            <div>Saturday</div>
-            <div>Sunday</div>
-        </div>
-        <div class="days">
-            @for(int i=0; i < startDay; i++)
-            {
-                <div class="empty"></div>
-            }
-            @for (int day = 1; day <= daysInMonth; day++)
-            {
-                var currentDate = new DateTime(month.Year, month.Month, day);
-                var fullDate = currentDate.ToString("yyyy-MM-dd");
-                var isToday = currentDate == DateTime.Today ? " today" : "";
+        <a href="?month=@(ViewBag.Month.AddMonths(1).Month)&year=@(ViewBag.Month.AddMonths(1).Year)">
+            <i class="fa fa-angle-right next"></i>
+        </a>
+    </div>
+    <div class="weekdays">
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+        <div>Saturday</div>
+        <div>Sunday</div>
+    </div>
+    <div class="days">
+        @for(int i=0; i < startDay; i++)
+        {
+            <div class="empty"></div>
+        }
+        @for (int day = 1; day <= daysInMonth; day++)
+        {
+            var currentDate = new DateTime(month.Year, month.Month, day);
+            var fullDate = currentDate.ToString("yyyy-MM-dd");
+            var isToday = currentDate == DateTime.Today ? " today" : "";
 
-                <div class="day@(isToday)" data-date="@fullDate">@day</div>
-            }
-        </div>
+            <div class="day@(isToday)" data-date="@fullDate">@day</div>
+        }
+    </div>
 
-        <div id="trainingModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <span id="selectedDate"></span>
-            </div>
+    <div id="trainingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <span id="selectedDate"></span>
         </div>
     </div>
 </div>
@@ -60,13 +58,8 @@
                 document.querySelectorAll('.day').forEach(day => {
                     day.addEventListener('click', () => {
                         const date = day.dataset.date;
-                        document.getElementById('selectedDate').innerText = date;
-                        document.getElementById('trainingModal').style.display = 'flex';
+                        window.location.href =  `/Training/Create?date=${date}`;
                     });
-                });
-
-                document.querySelector('.close').addEventListener('click', () => {
-                    document.getElementById('trainingModal').style.display = 'none';
                 });
 
             </script>
