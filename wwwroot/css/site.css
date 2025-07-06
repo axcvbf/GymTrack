@@ -29,11 +29,16 @@ header {
 }
 
 footer {
+    width: 100%;
+    height: 60px;
     display: flex;
     text-indent: 20px;
+    align-items: center;
     justify-content: space-between;
     background-color: #000000;
     color: white;
+    position: absolute;
+    bottom: 0;
 }
 
 .month {
@@ -76,4 +81,14 @@ footer {
 .empty {
     box-shadow: none !IMPORTANT;
     background-color: white !IMPORTANT;
+}
+
+.secondheader {
+    display: flex;
+    justify-content: center;
+}
+
+#excerciseForm{
+    display: grid;
+    width: 30%;
 }

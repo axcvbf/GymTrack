@@ -4,4 +4,31 @@
     ViewBag.Title = "Add Training";
 }
 
-<h2> Training for @Model.Date.ToShortDateString()</h2>
+<div class="secondheader">
+    <h2> Training for @Model.Date.ToShortDateString()</h2>
+</div>
+
+
+
+
+<div id="trainingContainer">
+    <form id="excerciseForm" method="post" action="/Training/Create">
+            <h3>Ćwiczenie</h3>
+
+            @Html.Label("Nazwa")
+            <input type="text" name="Excercises[0].Name"  />
+
+            @Html.Label("Ciezar")
+            <input type="number" name="Excercises[0].Weight" step="2.5"  />
+
+            @Html.Label("Powtorzenia")
+            <input type="number" name="Excercises[0].Reps" />
+
+            @Html.Label("Serie")
+            <input type="number" name="Excercises[0].Sets" />
+
+            <button type="button" onclick="addExcercise()">Dodaj cwiczenie</button>
+
+            <button type="submit">Zapisz trening</button>
+        </form>
+</div>
