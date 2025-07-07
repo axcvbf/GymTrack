@@ -16,19 +16,68 @@
             <h3>Ćwiczenie</h3>
 
             @Html.Label("Nazwa")
-            <input type="text" name="Excercises[0].Name"  />
+            <input type="text" id="nameInput"/>
 
             @Html.Label("Ciezar")
-            <input type="number" name="Excercises[0].Weight" step="2.5"  />
+            <input type="number" id="weightInput" step="2.5"  />
 
             @Html.Label("Powtorzenia")
-            <input type="number" name="Excercises[0].Reps" />
+            <input type="number" id="repsInput"/>
 
             @Html.Label("Serie")
-            <input type="number" name="Excercises[0].Sets" />
+            <input type="number" id="setsInput" />
 
             <button type="button" onclick="addExcercise()">Dodaj cwiczenie</button>
 
             <button type="submit">Zapisz trening</button>
         </form>
+
+        <div id="excerciseList">
+        </div>
+
+
 </div>
+
+
+<script>
+    let excerciseIndex = 0;
+
+    function addExcercise() {
+    const name = document.getElementById("nameInput").value;
+    const weight = document.getElementById("weightInput").value;
+    const reps = document.getElementById("repsInput").value;
+    const sets = document.getElementById("setsInput").value;
+
+    if(!name || !weight || !reps || !sets)
+    {
+        alert("Uzupelnij wszystkie pola");
+        return;
+    }
+
+    const item = document.createElement("div");
+    item.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
+    document.getElementById("excerciseList").appendChild(item);
+
+    const fields = [
+        { name: `Excercise[${excerciseIndex}].Name`, value: name },
+        { name: `Excercise[${excerciseIndex}].Weight`, value: weight },
+        { name: `Excercise[${excerciseIndex}].Reps`, value: reps },
+        { name: `Excercise[${excerciseIndex}].Sets`, value: sets } 
+    ];
+
+    fields.forEach(field =>{
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = field.name;
+        input.value = field.value;
+        document.getElementById("excerciseForm").appendChild(input);
+    });
+
+    excerciseIndex++;
+
+    document.getElementById("nameInput").value = "";
+    document.getElementById("weightInput").value = "";
+    document.getElementById("repsInput").value = "";
+    document.getElementById("setsInput").value = "";
+    }
+</script>

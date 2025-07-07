@@ -1,4 +1,4 @@
-#login-submit, #registerSubmit, .nav-tabs, .navbar-brand, .nav-link, nav-item {
+#login-submit, #registerSubmit, .nav-tabs, .navbar-brand, .nav-link, nav-item, button {
     color: white !important;
     background-color: black;
 }
@@ -91,4 +91,15 @@ footer {
 #excerciseForm{
     display: grid;
     width: 30%;
+}
+
+#trainingContainer {
+    display: flex;
+}
+
+#excerciseList{ 
+    width: 30%;
+    position: absolute;
+    right: 50px;
+    font-size: 30px;
 }
