@@ -53,10 +53,26 @@
         alert("Uzupelnij wszystkie pola");
         return;
     }
+    
+    const container = document.createElement("div");
+    container.classList.add("excerciseList");
+    container.dataset.excerciseIndex = excerciseIndex;    
 
-    const item = document.createElement("div");
-    item.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
-    document.getElementById("excerciseList").appendChild(item);
+    const text = document.createElement("span");
+    text.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
+    container.appendChild(text);
+
+    const removeButton = document.createElement("button");
+    removeButton.innerText = `Usun`;
+    removeButton.style.marginLeft = "10px";
+    removeButton.onclick = function() {
+        document.querySelectorAll(`input[data-owner="${excerciseIndex}"`).forEach(input => input.remove());
+        container.remove();
+    }
+    
+    container.appendChild(removeButton);
+
+    document.getElementById("excerciseList").appendChild(container);
 
     const fields = [
         { name: `Excercise[${excerciseIndex}].Name`, value: name },
@@ -70,14 +86,15 @@
         input.type = "hidden";
         input.name = field.name;
         input.value = field.value;
+        input.setAttribute("data-owner", excerciseIndex);
         document.getElementById("excerciseForm").appendChild(input);
     });
 
     excerciseIndex++;
 
-    document.getElementById("nameInput").value = "";
-    document.getElementById("weightInput").value = "";
-    document.getElementById("repsInput").value = "";
-    document.getElementById("setsInput").value = "";
+    // document.getElementById("nameInput").value = "";
+    // document.getElementById("weightInput").value = "";
+    // document.getElementById("repsInput").value = "";
+    // document.getElementById("setsInput").value = "";
     }
 </script>
