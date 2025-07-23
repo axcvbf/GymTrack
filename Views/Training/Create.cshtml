@@ -1,4 +1,5 @@
-﻿@model GymTrack.Models.TrainingViewModel
+﻿@using GymTrack.ViewModels
+@model TrainingViewModel
 
 @{
     ViewBag.Title = "Add Training";
@@ -12,27 +13,35 @@
 
 
 <div id="trainingContainer">
-    <form id="excerciseForm" method="post" action="/Training/Create">
-            <h3>Ćwiczenie</h3>
+    <form id="exerciseForm" method="post" action="/Training/Create">
+            @Html.Label("Category")
+            <select id="categorySelect" onchange="updateExerciseOptions()">
+                <option value=""> - - - select - - - </option>
+                <option value="Push">Push</option>
+                <option value="Pull">Pull</option>
+                <option value="Legs">Legs</option>
+            </select>
 
-            @Html.Label("Nazwa")
-            <input type="text" id="nameInput"/>
+            @Html.Label("Exercise")
+            <select id="exerciseSelect">
+                <option value=""> - - - select - - - </option>
+            </select>
 
-            @Html.Label("Ciezar")
+            @Html.Label("Weight")
             <input type="number" id="weightInput" step="2.5"  />
 
-            @Html.Label("Powtorzenia")
+            @Html.Label("Repetitions")
             <input type="number" id="repsInput"/>
 
-            @Html.Label("Serie")
+            @Html.Label("Series")
             <input type="number" id="setsInput" />
 
-            <button type="button" onclick="addExcercise()">Dodaj cwiczenie</button>
+            <button type="button" onclick="addExercise()">Add Exercise</button>
 
-            <button type="submit">Zapisz trening</button>
+            <button type="submit">Save Training</button>
         </form>
 
-        <div id="excerciseList">
+        <div id="exerciseList">
         </div>
 
 
@@ -40,10 +49,34 @@
 
 
 <script>
-    let excerciseIndex = 0;
+    const exercises = {
+        "Push": ["Benchpress", "Shoulderpress", "Incline"],
+        "Pull": ["Pullups", "SeaatedRow", "Biceps"],
+        "Legs": ["Legpress", "Quads", "Calves"]
+    };
 
-    function addExcercise() {
-    const name = document.getElementById("nameInput").value;
+    let exerciseIndex = 0;
+    
+    function updateExerciseOptions()
+    {
+        const category = document.getElementById("categorySelect").value;
+        const exerciseSelect = document.getElementById("exerciseSelect");
+
+        exerciseSelect.innerHTML = '<option value=""> - - - select - - - </option>';
+
+        if(exercises[category]){
+            exercises[category].forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                exerciseSelect.appendChild(option);
+            });
+
+        }
+    }
+
+    function addExercise() {
+    const name = document.getElementById("exerciseSelect").value;
     const weight = document.getElementById("weightInput").value;
     const reps = document.getElementById("repsInput").value;
     const sets = document.getElementById("setsInput").value;
@@ -55,8 +88,8 @@
     }
     
     const container = document.createElement("div");
-    container.classList.add("excerciseList");
-    container.dataset.excerciseIndex = excerciseIndex;    
+    container.classList.add("exerciseList");
+    container.dataset.exerciseIndex = exerciseIndex;    
 
     const text = document.createElement("span");
     text.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
@@ -66,19 +99,19 @@
     removeButton.innerText = `Usun`;
     removeButton.style.marginLeft = "10px";
     removeButton.onclick = function() {
-        document.querySelectorAll(`input[data-owner="${excerciseIndex}"`).forEach(input => input.remove());
+        document.querySelectorAll(`input[data-owner="${exerciseIndex}"`).forEach(input => input.remove());
         container.remove();
     }
     
     container.appendChild(removeButton);
 
-    document.getElementById("excerciseList").appendChild(container);
+    document.getElementById("exerciseList").appendChild(container);
 
     const fields = [
-        { name: `Excercise[${excerciseIndex}].Name`, value: name },
-        { name: `Excercise[${excerciseIndex}].Weight`, value: weight },
-        { name: `Excercise[${excerciseIndex}].Reps`, value: reps },
-        { name: `Excercise[${excerciseIndex}].Sets`, value: sets } 
+        { name: `Exercise[${exerciseIndex}].Name`, value: name },
+        { name: `Exercise[${exerciseIndex}].Weight`, value: weight },
+        { name: `Exercise[${exerciseIndex}].Reps`, value: reps },
+        { name: `Exercise[${exerciseIndex}].Sets`, value: sets } 
     ];
 
     fields.forEach(field =>{
@@ -86,11 +119,11 @@
         input.type = "hidden";
         input.name = field.name;
         input.value = field.value;
-        input.setAttribute("data-owner", excerciseIndex);
-        document.getElementById("excerciseForm").appendChild(input);
+        input.setAttribute("data-owner", exerciseIndex);
+        document.getElementById("exerciseForm").appendChild(input);
     });
 
-    excerciseIndex++;
+    exerciseIndex++;
 
     // document.getElementById("nameInput").value = "";
     // document.getElementById("weightInput").value = "";

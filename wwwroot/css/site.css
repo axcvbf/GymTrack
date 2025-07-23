@@ -88,7 +88,7 @@ footer {
     justify-content: center;
 }
 
-#excerciseForm{
+#exerciseForm{
     display: grid;
     width: 30%;
 }
@@ -97,7 +97,7 @@ footer {
     display: flex;
 }
 
-#excerciseList{ 
+#exerciseList{ 
     width: 30%;
     position: absolute;
     right: 50px;

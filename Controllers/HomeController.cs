@@ -1,5 +1,5 @@
 using GymTrack.Areas.Identity.Data;
-using GymTrack.Models;
+using GymTrack.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

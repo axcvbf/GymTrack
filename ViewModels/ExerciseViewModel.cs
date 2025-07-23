@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GymTrack.Models
+namespace GymTrack.ViewModels
 {
-    public class ExcerciseViewModel
+    public class ExerciseViewModel
     {
         [Required]
         public string Name { get; set; }

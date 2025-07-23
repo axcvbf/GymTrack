@@ -1,4 +1,5 @@
 ﻿using GymTrack.Areas.Identity.Data;
+using GymTrack.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,4 +20,8 @@ public class GymDbContext : IdentityDbContext<GymUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+    public DbSet<Training> Trainings { get; set; }
+    public DbSet<Exercise> Excercise { get; set; } 
+    public DbSet<ExerciseData> ExcerciseDatas { get; set; }
 }

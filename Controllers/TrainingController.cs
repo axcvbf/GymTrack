@@ -1,5 +1,5 @@
 ﻿using GymTrack.Areas.Identity.Data;
-using GymTrack.Models;
+using GymTrack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +20,9 @@ namespace GymTrack.Controllers
             var model = new TrainingViewModel
             {
                 Date = date,
-                Excercises = new List<ExcerciseViewModel>
+                Exercises = new List<ExerciseViewModel>
                 {
-                    new ExcerciseViewModel()
+                    new ExerciseViewModel()
                 }
             };
 

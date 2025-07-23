@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GymTrack.Models
+namespace GymTrack.ViewModels
 {
     public class TrainingViewModel
     {
         [Required]
         public DateTime Date { get; set; }
-        public List<ExcerciseViewModel> Excercises{ get; set; }
+        public List<ExerciseViewModel> Exercises{ get; set; }
     }
 }
