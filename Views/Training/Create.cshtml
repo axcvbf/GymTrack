@@ -14,6 +14,9 @@
 
 <div id="trainingContainer">
     <form id="exerciseForm" method="post" action="/Training/Create">
+            @Html.Label("Date")
+            <input type="hidden" name="date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+
             @Html.Label("Category")
             <select id="categorySelect" onchange="updateExerciseOptions()">
                 <option value=""> - - - select - - - </option>
@@ -75,59 +78,57 @@
         }
     }
 
-    function addExercise() {
-    const name = document.getElementById("exerciseSelect").value;
-    const weight = document.getElementById("weightInput").value;
-    const reps = document.getElementById("repsInput").value;
-    const sets = document.getElementById("setsInput").value;
-
-    if(!name || !weight || !reps || !sets)
+    function addExercise() 
     {
-        alert("Uzupelnij wszystkie pola");
-        return;
-    }
+        const name = document.getElementById("exerciseSelect").value;
+        const category = document.getElementById("categorySelect").value;
+        const weight = document.getElementById("weightInput").value;
+        const reps = document.getElementById("repsInput").value;
+        const sets = document.getElementById("setsInput").value;
+
+        if(!name || !weight || !reps || !sets)
+        {
+            alert("Uzupelnij wszystkie pola");
+            return;
+        }
     
-    const container = document.createElement("div");
-    container.classList.add("exerciseList");
-    container.dataset.exerciseIndex = exerciseIndex;    
+        const container = document.createElement("div");
+        container.classList.add("exerciseList");
+        container.dataset.exerciseIndex = exerciseIndex;    
 
-    const text = document.createElement("span");
-    text.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
-    container.appendChild(text);
+        const text = document.createElement("span");
+        text.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
+        container.appendChild(text);
 
-    const removeButton = document.createElement("button");
-    removeButton.innerText = `Usun`;
-    removeButton.style.marginLeft = "10px";
-    removeButton.onclick = function() {
-        document.querySelectorAll(`input[data-owner="${exerciseIndex}"`).forEach(input => input.remove());
-        container.remove();
-    }
+        const removeButton = document.createElement("button");
+        removeButton.innerText = `Usun`;
+        removeButton.style.marginLeft = "10px";
+        removeButton.onclick = function() {
+            document.querySelectorAll(`input[data-owner="${exerciseIndex}"`).forEach(input => input.remove());
+            container.remove();
+        }
     
-    container.appendChild(removeButton);
+        container.appendChild(removeButton);
 
-    document.getElementById("exerciseList").appendChild(container);
+        document.getElementById("exerciseList").appendChild(container);
 
-    const fields = [
-        { name: `Exercise[${exerciseIndex}].Name`, value: name },
-        { name: `Exercise[${exerciseIndex}].Weight`, value: weight },
-        { name: `Exercise[${exerciseIndex}].Reps`, value: reps },
-        { name: `Exercise[${exerciseIndex}].Sets`, value: sets } 
-    ];
+        const fields = [
+            { name: `Exercises[${exerciseIndex}].Name`, value: name },
+            { name: `Exercises[${exerciseIndex}].Category`, value: category},
+            { name: `Exercises[${exerciseIndex}].Weight`, value: weight },
+            { name: `Exercises[${exerciseIndex}].Reps`, value: reps },
+            { name: `Exercises[${exerciseIndex}].Sets`, value: sets } 
+        ];
 
-    fields.forEach(field =>{
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = field.name;
-        input.value = field.value;
-        input.setAttribute("data-owner", exerciseIndex);
-        document.getElementById("exerciseForm").appendChild(input);
-    });
+        fields.forEach(field =>{
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = field.name;
+            input.value = field.value;
+            input.setAttribute("data-owner", exerciseIndex);
+            document.getElementById("exerciseForm").appendChild(input);
+        });
 
-    exerciseIndex++;
-
-    // document.getElementById("nameInput").value = "";
-    // document.getElementById("weightInput").value = "";
-    // document.getElementById("repsInput").value = "";
-    // document.getElementById("setsInput").value = "";
+        exerciseIndex++;
     }
 </script>

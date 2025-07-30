@@ -16,12 +16,24 @@ public class GymDbContext : IdentityDbContext<GymUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
+
+        builder.Entity<Training>()
+            .HasOne(t => t.GymUser)
+            .WithMany(u => u.Trainings)
+            .HasForeignKey(t => t.GymUserId);
+
+        builder.Entity<ExerciseData>()
+            .HasOne(ed => ed.Exercise)
+            .WithMany(e => e.Datas)
+            .HasForeignKey(ed => ed.ExerciseId);
+
+        builder.Entity<ExerciseData>()
+            .HasOne(ed => ed.Training)
+            .WithMany(t => t.Exercises)
+            .HasForeignKey(ed => ed.TrainingId);
     }
 
     public DbSet<Training> Trainings { get; set; }
-    public DbSet<Exercise> Excercise { get; set; } 
-    public DbSet<ExerciseData> ExcerciseDatas { get; set; }
+    public DbSet<Exercise> Exercise { get; set; } 
+    public DbSet<ExerciseData> ExerciseDatas { get; set; }
 }

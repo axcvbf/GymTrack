@@ -8,6 +8,6 @@ namespace GymTrack.Models
         public DateTime Date { get; set; }
         public string GymUserId { get; set; }
         public GymUser GymUser { get; set; }
-        public ICollection<ExerciseData> Excercises { get; set; }
+        public ICollection<ExerciseData> Exercises { get; set; }
     }
 }
