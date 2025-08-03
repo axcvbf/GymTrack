@@ -1,23 +1,28 @@
-﻿@using System.Globalization
+﻿@using GymTrack.ViewModels
+@using System.Globalization
+@model HomeViewModel
+
 @{
     ViewData["Title"] = "Calendar";
 
-    var month = ViewBag.Month;
-    int daysInMonth = DateTime.DaysInMonth(month.Year, month.Month);
-    int startDay = (int)month.DayOfWeek;
+    var currentDate = Model.currentDate;
+    int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+    int startDay = (int)currentDate.DayOfWeek;
 
     startDay = startDay == 0 ? 6 : startDay - 1;
+
+    var trainingDays = Model.trainingDays as List<DateTime> ?? new List<DateTime>();
 }
 
 <div class="calendar">
     <div class="month">
-        <a href="?month=@(ViewBag.Month.AddMonths(-1).Month)&year=@(ViewBag.Month.AddMonths(-1).Year)">
+        <a href="?month=@(Model.currentDate.AddMonths(-1).Month)&year=@(Model.currentDate.AddMonths(-1).Year)">
             <i class="fa fa-angle-left prev"></i>
         </a>
         <div class="date">
-            <h2>@(ViewBag.Month.ToString("MMMM yyyy", new CultureInfo("en-US")))</h2>
+            <h2>@(Model.currentDate.ToString("MMMM yyyy", new CultureInfo("en-US")))</h2>
         </div>
-        <a href="?month=@(ViewBag.Month.AddMonths(1).Month)&year=@(ViewBag.Month.AddMonths(1).Year)">
+        <a href="?month=@(Model.currentDate.AddMonths(1).Month)&year=@(Model.currentDate.AddMonths(1).Year)">
             <i class="fa fa-angle-right next"></i>
         </a>
     </div>
@@ -37,11 +42,11 @@
         }
         @for (int day = 1; day <= daysInMonth; day++)
         {
-            var currentDate = new DateTime(month.Year, month.Month, day);
-            var fullDate = currentDate.ToString("yyyy-MM-dd");
-            var isToday = currentDate == DateTime.Today ? " today" : "";
-
-            <div class="day@(isToday)" data-date="@fullDate">@day</div>
+            var iterationCurrentDate = new DateTime(currentDate.Year, currentDate.Month, day);
+            var fullDate = iterationCurrentDate.ToString("yyyy-MM-dd");
+            var isToday = iterationCurrentDate == DateTime.Today ? " today" : "";
+            var hasTraining = trainingDays.Any(d => d.Date == iterationCurrentDate.Date) ? " hasTraining" : "";
+            <div class="day@(isToday)@(hasTraining)" data-date="@fullDate">@day</div>
         }
     </div>
 

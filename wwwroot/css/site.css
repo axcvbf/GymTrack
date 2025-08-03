@@ -84,7 +84,7 @@ footer {
     .days div {
         font-family: 'Franklin Gothic Medium';
         background-color: #000000;
-        font-size: 60px;
+        font-size: 50px;
         box-shadow: 3px 3px 5px black;
         padding: 10px;
         box-sizing: border-box;
@@ -96,6 +96,10 @@ footer {
 .day.today {
     background-color: white;
     color: black;
+}
+
+.day.hasTraining {
+    box-shadow: 4px 4px 6px green !important;
 }
 
 .empty {
