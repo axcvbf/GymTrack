@@ -46,17 +46,12 @@ namespace GymTrack.Controllers
                 return View(model);
             }
 
-            var newModel = new TrainingViewModel
+
+            return View(new TrainingViewModel
             {
                 Date = date,
-                Exercises = new List<ExerciseViewModel>
-                {
-                    new ExerciseViewModel()
-                }
-            };
-
-
-            return View(newModel);
+                Exercises = new List<ExerciseViewModel>()
+            });
         }
 
         [HttpPost]
