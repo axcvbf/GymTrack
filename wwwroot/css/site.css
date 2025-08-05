@@ -117,6 +117,7 @@ footer {
 #exerciseForm{
     display: grid;
     width: 30%;
+    margin-top: 24px;
 }
 
 #trainingContainer {
@@ -129,4 +130,8 @@ footer {
     margin-top: 24px;
     right: 50px;
     font-size: 15px;
+}
+
+.removeButton{
+    float: right;
 }

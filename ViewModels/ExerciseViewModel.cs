@@ -12,8 +12,8 @@ namespace GymTrack.ViewModels
         public double Weight { get; set; }
         [Range(1, 50)]
         public int Reps { get; set; }
-        [Range(1, 50)]
-        public int Sets { get; set; }
+        //[Range(1, 50)]
+        //public int Sets { get; set; }
         
     }
 }

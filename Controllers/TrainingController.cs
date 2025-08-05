@@ -39,7 +39,7 @@ namespace GymTrack.Controllers
                         Name =  e.Exercise.Name,
                         Weight = e.Weight,
                         Reps = e.Reps,
-                        Sets = e.Sets
+                        //Sets = e.Sets
                     }).ToList()
                 };
 
@@ -85,7 +85,7 @@ namespace GymTrack.Controllers
                     ExerciseId = exercise.Id,
                     Weight = ex.Weight,
                     Reps = ex.Reps,
-                    Sets = ex.Sets
+                    //Sets = ex.Sets
                 };
 
                 training.Exercises.Add(exerciseData);     

@@ -14,7 +14,7 @@
 
 <div id="trainingContainer">
     <form id="exerciseForm" method="post" action="/Training/Create">
-            @Html.Label("Date")
+@*             @Html.Label("Date") *@
             <input type="hidden" name="date" value="@Model.Date.ToString("yyyy-MM-dd")" />
 
             @Html.Label("Category")
@@ -35,10 +35,10 @@
 
             @Html.Label("Repetitions")
             <input type="number" id="repsInput"/>
-
+@* 
             @Html.Label("Series")
             <input type="number" id="setsInput" />
-
+ *@
             <button type="button" onclick="addExercise()">Add Exercise</button>
 
             <button type="submit">Save Training</button>
@@ -49,14 +49,14 @@
         {
             var ex = Model.Exercises[i];
             <div class="exerciseList" data-exercise-index="@i">
-                <span>@ex.Name - @ex.Weight kg x @ex.Reps powtorzen x @ex.Sets serii</span>
+                <span>@ex.Name - @ex.Weight kg x @ex.Reps powtorzen@*  x @ex.Sets serii *@</span>
                 <button type="button" style="margin-left:10px" onclick="removeExercise(@i)">Delete</button>
                 
                 <input type="hidden" name="Exercises[@i].Name" value="@ex.Name" data-owner="@i"/>
                 <input type="hidden" name="Exercises[@i].Category" value="@ex.Category" data-owner="@i" />
                 <input type="hidden" name="Exercises[@i].Weight" value="@ex.Weight" data-owner="@i" />
-                <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />
-                <input type="hidden" name="Exercises[@i].Sets" value="@ex.Sets" data-owner="@i" />
+                <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />@* 
+                <input type="hidden" name="Exercises[@i].Sets" value="@ex.Sets" data-owner="@i" /> *@
 
             </div>
         }
@@ -109,9 +109,9 @@
         const category = document.getElementById("categorySelect").value;
         const weight = document.getElementById("weightInput").value;
         const reps = document.getElementById("repsInput").value;
-        const sets = document.getElementById("setsInput").value;
+        // const sets = document.getElementById("setsInput").value;
 
-        if(!name || !weight || !reps || !sets)
+        if(!name || !weight || !reps /* || !sets */)
         {
             alert("Uzupelnij wszystkie pola");
             return;
@@ -122,7 +122,7 @@
         container.dataset.exerciseIndex = exerciseIndex;    
 
         const text = document.createElement("span");
-        text.innerText = `${name} - ${weight} kg x ${reps} powtorzen x ${sets} serii `;
+        text.innerText = `${name} - ${weight} kg x ${reps} powtorzen `;
         container.appendChild(text);
 
         const removeButton = document.createElement("button");
@@ -142,7 +142,7 @@
             { name: `Exercises[${exerciseIndex}].Category`, value: category},
             { name: `Exercises[${exerciseIndex}].Weight`, value: weight },
             { name: `Exercises[${exerciseIndex}].Reps`, value: reps },
-            { name: `Exercises[${exerciseIndex}].Sets`, value: sets } 
+            // { name: `Exercises[${exerciseIndex}].Sets`, value: sets } 
         ];
 
         fields.forEach(field =>{
