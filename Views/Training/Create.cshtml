@@ -6,7 +6,7 @@
 }
 
 <div class="secondheader">
-    <h2> Training for @Model.Date.ToShortDateString()</h2>
+    <h3> Training for @Model.Date.ToShortDateString()</h3>
 </div>
 
 
@@ -45,6 +45,21 @@
         </form>
 
         <div id="exerciseList">
+        @for (int i=0; i < Model.Exercises.Count; i++)
+        {
+            var ex = Model.Exercises[i];
+            <div class="exerciseList" data-exercise-index="@i">
+                <span>@ex.Name - @ex.Weight kg x @ex.Reps powtorzen x @ex.Sets serii</span>
+                <button type="button" style="margin-left:10px" onclick="removeExercise(@i)">Delete</button>
+                
+                <input type="hidden" name="Exercises[@i].Name" value="@ex.Name" data-owner="@i"/>
+                <input type="hidden" name="Exercises[@i].Category" value="@ex.Category" data-owner="@i" />
+                <input type="hidden" name="Exercises[@i].Weight" value="@ex.Weight" data-owner="@i" />
+                <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />
+                <input type="hidden" name="Exercises[@i].Sets" value="@ex.Sets" data-owner="@i" />
+
+            </div>
+        }
         </div>
 
 
@@ -52,6 +67,7 @@
 
 
 <script>
+
     const exercises = {
         "Push": ["Benchpress", "Shoulderpress", "Incline"],
         "Pull": ["Pullups", "SeaatedRow", "Biceps"],
@@ -59,7 +75,16 @@
     };
 
     let exerciseIndex = 0;
-    
+
+    if (@Model.Exercises.Count > 0) {
+        exerciseIndex = @Model.Exercises.Count;
+    }
+
+    function removeExercise(exerciseIndex) {
+        document.querySelectorAll(`input[data-owner="${exerciseIndex}"]`).forEach(input => input.remove());
+        const container = document.querySelector(`[data-exercise-index="${exerciseIndex}"]`);
+        if (container) container.remove();
+    }
     function updateExerciseOptions()
     {
         const category = document.getElementById("categorySelect").value;
@@ -97,11 +122,11 @@
         container.dataset.exerciseIndex = exerciseIndex;    
 
         const text = document.createElement("span");
-        text.innerText = `${name} - ${weight}kg x ${reps} powtorzen x ${sets} serii`;
+        text.innerText = `${name} - ${weight} kg x ${reps} powtorzen x ${sets} serii `;
         container.appendChild(text);
 
         const removeButton = document.createElement("button");
-        removeButton.innerText = `Usun`;
+        removeButton.innerText = `Delete`;
         removeButton.style.marginLeft = "10px";
         removeButton.onclick = function() {
             document.querySelectorAll(`input[data-owner="${exerciseIndex}"`).forEach(input => input.remove());

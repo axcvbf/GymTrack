@@ -4,6 +4,7 @@ using GymTrack.Models;
 using GymTrack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GymTrack.Controllers
@@ -18,11 +19,34 @@ namespace GymTrack.Controllers
             UserManager = userManager;
             Context = context;
         }
-        public IActionResult Create(DateTime date)
+        public async Task<IActionResult> Create(DateTime date)
         {
-            ViewData["UserID"] = UserManager.GetUserId(this.User);
+            var userId = UserManager.GetUserId(this.User);
+            ViewData["UserID"] = userId;
 
-            var model = new TrainingViewModel
+            var existingTraining = await Context.Trainings
+                .Include(t => t.Exercises)
+                    .ThenInclude(e => e.Exercise)
+                .FirstOrDefaultAsync(t => t.GymUserId == userId && t.Date == date.Date);
+
+            if (existingTraining != null)
+            {
+                var model = new TrainingViewModel
+                {
+                    Date = existingTraining.Date,
+                    Exercises = existingTraining.Exercises.Select(e => new ExerciseViewModel
+                    {
+                        Name =  e.Exercise.Name,
+                        Weight = e.Weight,
+                        Reps = e.Reps,
+                        Sets = e.Sets
+                    }).ToList()
+                };
+
+                return View(model);
+            }
+
+            var newModel = new TrainingViewModel
             {
                 Date = date,
                 Exercises = new List<ExerciseViewModel>
@@ -32,7 +56,7 @@ namespace GymTrack.Controllers
             };
 
 
-            return View(model);
+            return View(newModel);
         }
 
         [HttpPost]

@@ -96,10 +96,12 @@ footer {
 .day.today {
     background-color: white;
     color: black;
+    box-shadow: 4px 4px 6px red;
 }
 
 .day.hasTraining {
-    box-shadow: 4px 4px 6px green !important;
+    box-shadow: 5px 5px 7px green !important;
+    color: lightgreen;
 }
 
 .empty {
@@ -124,6 +126,7 @@ footer {
 #exerciseList{ 
     width: 30%;
     position: absolute;
+    margin-top: 24px;
     right: 50px;
-    font-size: 20px;
+    font-size: 15px;
 }
