@@ -58,7 +58,7 @@ footer {
 }
 .month {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     font-size: 25px;
 }
 
@@ -132,6 +132,18 @@ footer {
     font-size: 15px;
 }
 
+.exerciseList {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom:solid 1px;
+    box-shadow: 1px 2px 4px lightgreen;
+}
+
 .removeButton{
     float: right;
+}
+
+#categorySelect, #exerciseSelect, #weightInput, #repsInput {
+    margin-bottom: 10px;
 }
