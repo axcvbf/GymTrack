@@ -37,6 +37,7 @@ namespace GymTrack.Controllers
                     Exercises = existingTraining.Exercises.Select(e => new ExerciseViewModel
                     {
                         Name =  e.Exercise.Name,
+                        Category = e.Exercise.Category,
                         Weight = e.Weight,
                         Reps = e.Reps,
                         //Sets = e.Sets
@@ -57,40 +58,85 @@ namespace GymTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TrainingViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            Console.WriteLine("Exercise count: " + model.Exercises?.Count); // lub debuguj w IDE
 
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).ToList();
+                foreach(var e in errors)
+                {
+                    Console.WriteLine($"{e.ErrorMessage}, Exception: {e.Exception}");
+                }
+                return View(model);
+            }
             var user = await UserManager.GetUserAsync(User);
 
-            var training = new Training
+            var existingTraining = await Context.Trainings
+                .Include(t => t.Exercises)
+                    .ThenInclude(ed => ed.Exercise)
+                .FirstOrDefaultAsync(t => t.Date == model.Date && t.GymUserId == user.Id);
+
+            if(existingTraining == null)
             {
-                Date = model.Date,
-                GymUserId = user.Id,
-                Exercises = new List<ExerciseData>()
-            };
-
-            foreach (var ex in model.Exercises)
-            {
-                var exercise = Context.Exercise.FirstOrDefault(e => e.Name == ex.Name);
-
-                if(exercise == null)
+                var training = new Training
                 {
-                    exercise = new Exercise { Name = ex.Name, Category = ex.Category };
-                    Context.Exercise.Add(exercise);
-                    await Context.SaveChangesAsync();
-                }
-
-                var exerciseData = new ExerciseData
-                {
-                    ExerciseId = exercise.Id,
-                    Weight = ex.Weight,
-                    Reps = ex.Reps,
-                    //Sets = ex.Sets
+                    Date = model.Date,
+                    GymUserId = user.Id,
+                    Exercises = new List<ExerciseData>()
                 };
 
-                training.Exercises.Add(exerciseData);     
+                foreach (var ex in model.Exercises)
+                {
+                    var exercise = Context.Exercise.FirstOrDefault(e => e.Name == ex.Name);
+
+                    if (exercise == null)
+                    {
+                        exercise = new Exercise { Name = ex.Name, Category = ex.Category };
+                        Context.Exercise.Add(exercise);
+                        await Context.SaveChangesAsync();
+                    }
+
+                    var exerciseData = new ExerciseData
+                    {
+                        ExerciseId = exercise.Id,
+                        Weight = ex.Weight,
+                        Reps = ex.Reps,
+                        //Sets = ex.Sets
+                    };
+
+                    training.Exercises.Add(exerciseData);
+                }
+                Context.Trainings.Add(training);
             }
-            Context.Trainings.Add(training);
+            else
+            {
+                existingTraining.Exercises.Clear();
+
+                foreach (var ex in model.Exercises)
+                {
+                    var exercise = Context.Exercise.FirstOrDefault(e => e.Name == ex.Name);
+
+                    if (exercise == null)
+                    {
+                        exercise = new Exercise { Name = ex.Name, Category = ex.Category };
+                        Context.Exercise.Add(exercise);
+                        await Context.SaveChangesAsync();
+                    }
+
+                    var exerciseData = new ExerciseData
+                    {
+                        ExerciseId = exercise.Id,
+                        Weight = ex.Weight,
+                        Reps = ex.Reps,
+                        //Sets = ex.Sets
+                    };
+
+                    existingTraining.Exercises.Add(exerciseData);
+                }
+                Context.Update(existingTraining);
+
+            }
+
             await Context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Home");

@@ -15,7 +15,7 @@
 <div id="trainingContainer">
     <form id="exerciseForm" method="post" action="/Training/Create">
 @*             @Html.Label("Date") *@
-            <input type="hidden" name="date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+            <input type="hidden" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
 
             @Html.Label("Category")
             <select id="categorySelect" onchange="updateExerciseOptions()">
@@ -42,8 +42,7 @@
             <button type="button" onclick="addExercise()">Add Exercise</button>
 
             <button type="submit">Save Training</button>
-        </form>
-
+        
         <div id="exerciseList">
         @for (int i=0; i < Model.Exercises.Count; i++)
         {
@@ -61,6 +60,7 @@
             </div>
         }
         </div>
+    </form>
 
 
 </div>
@@ -129,7 +129,7 @@
         removeButton.innerText = `Delete`;
         removeButton.style.marginLeft = "10px";
         removeButton.onclick = function() {
-            document.querySelectorAll(`input[data-owner="${exerciseIndex}"`).forEach(input => input.remove());
+            document.querySelectorAll(`input[data-owner="${exerciseIndex}"]`).forEach(input => input.remove());
             container.remove();
         }
     
