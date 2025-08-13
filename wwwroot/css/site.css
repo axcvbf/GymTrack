@@ -60,6 +60,7 @@ footer {
     display: flex;
     justify-content: space-between;
     font-size: 25px;
+    margin-top: 10px;
 }
 
 .weekdays{
@@ -67,6 +68,7 @@ footer {
     grid-template-columns: repeat(7,1fr);
     text-align: center;
     font-size: 30px;
+    margin-top: 50px;
 }
 
 .days {
@@ -112,6 +114,7 @@ footer {
 .secondheader {
     display: flex;
     justify-content: center;
+    margin-top: 10px;
 }
 
 #exerciseForm{
