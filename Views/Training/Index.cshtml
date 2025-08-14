@@ -13,7 +13,7 @@
 
 
 <div id="trainingContainer">
-    <form id="exerciseForm" method="post" action="/Training/Create">
+    <form id="exerciseForm" method="post" action="/Training/Index">
 @*             @Html.Label("Date") *@
             <input type="hidden" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
 
@@ -48,7 +48,7 @@
         {
             var ex = Model.Exercises[i];
             <div class="exerciseList" data-exercise-index="@i">
-                <span>@ex.Name - @ex.Weight kg x @ex.Reps powtorzen@*  x @ex.Sets serii *@</span>
+                <span>@ex.Name - @ex.Weight kg for @ex.Reps repetitions@*  x @ex.Sets serii *@</span>
                 <button type="button" style="margin-left:10px" onclick="removeExercise(@i)">Delete</button>
                 
                 <input type="hidden" name="Exercises[@i].Name" value="@ex.Name" data-owner="@i"/>
@@ -122,7 +122,7 @@
         container.dataset.exerciseIndex = exerciseIndex;    
 
         const text = document.createElement("span");
-        text.innerText = `${name} - ${weight} kg x ${reps} powtorzen `;
+        text.innerText = `${name} - ${weight} kg for ${reps} repetitions `;
         container.appendChild(text);
 
         const removeButton = document.createElement("button");

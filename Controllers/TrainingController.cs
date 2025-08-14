@@ -19,7 +19,7 @@ namespace GymTrack.Controllers
             UserManager = userManager;
             Context = context;
         }
-        public async Task<IActionResult> Create(DateTime date)
+        public async Task<IActionResult> Index(DateTime date)
         {
             var userId = UserManager.GetUserId(this.User);
             ViewData["UserID"] = userId;
@@ -56,7 +56,7 @@ namespace GymTrack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(TrainingViewModel model)
+        public async Task<IActionResult> Index(TrainingViewModel model)
         {
             Console.WriteLine("Exercise count: " + model.Exercises?.Count); // lub debuguj w IDE
 

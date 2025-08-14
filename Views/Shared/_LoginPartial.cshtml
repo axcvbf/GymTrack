@@ -13,16 +13,16 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li>
-                <a class="dropdown-item asp-controller="Stats" asp-action="Index">
+                <a class="dropdown-item" asp-controller="Stats" asp-action="Index">
                     <i class="fa fa-chart-bar"></i>Statistics
                 </a>
             </li>
             <li>
-                <form class="dropdown-item p-0" asp-area="Identity" asp-page="/Account/Logout" 
-                    asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <buttton class="btn">
+                <form class="p-0" asp-area="Identity" asp-page="/Account/Logout" 
+                    asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                        <button type="submit" class="dropdown-item">
                         <i class="fa fa-sign-out-alt"></i> Logout
-                    </buttton>
+                    </button>
                 </form>
             </li>
         </ul>
