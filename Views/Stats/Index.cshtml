@@ -1,8 +1,23 @@
 ﻿@using GymTrack.Areas.Identity.Data
+@using GymTrack.Models.DTOs
 @using Microsoft.AspNetCore.Identity
 
 @inject UserManager<GymUser> UserManager
+@model UserStatsDto
+
 
 <div class="secondheader">
     <h2>Data for @UserManager.GetUserName(User)</h2>
+</div>
+
+<div class="trainingContainer">
+    @if(Model != null)
+    {
+    <div class="userStats">
+        <div>Trainings: @Model.TrainingsCount</div>
+        <div>Sets: @Model.SetsCount</div>
+        <div>Reps: @Model.RepsCount</div>
+        <div>Total Weight: @Model.TotalWeight</div>
+    </div>
+    }
 </div>

@@ -98,7 +98,7 @@ footer {
 .day.today {
     background-color: white;
     color: black;
-    box-shadow: 4px 4px 6px red;
+    box-shadow: 7px 7px 20px red;
 }
 
 .day.hasTraining {

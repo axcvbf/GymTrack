@@ -58,17 +58,19 @@ namespace GymTrack.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(TrainingViewModel model)
         {
-            Console.WriteLine("Exercise count: " + model.Exercises?.Count); // lub debuguj w IDE
+            //Console.WriteLine("Exercise count: " + model.Exercises?.Count);
 
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).ToList();
-                foreach(var e in errors)
-                {
-                    Console.WriteLine($"{e.ErrorMessage}, Exception: {e.Exception}");
-                }
-                return View(model);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    var errors = ModelState.Values.SelectMany(v => v.Errors).ToList();
+            //    foreach(var e in errors)
+            //    {
+            //        Console.WriteLine($"{e.ErrorMessage}, Exception: {e.Exception}");
+            //    }
+
+            //    model.Exercises ??= new List<ExerciseViewModel>();
+            //    return View(model);
+            //}
             var user = await UserManager.GetUserAsync(User);
 
             var existingTraining = await Context.Trainings
@@ -76,7 +78,25 @@ namespace GymTrack.Controllers
                     .ThenInclude(ed => ed.Exercise)
                 .FirstOrDefaultAsync(t => t.Date == model.Date && t.GymUserId == user.Id);
 
-            if(existingTraining == null)
+            if (model.Exercises == null || !model.Exercises.Any())
+            {
+                if(existingTraining != null)
+                {
+
+                    Context.Trainings.Remove(existingTraining);
+                    await Context.SaveChangesAsync();
+                }
+
+                //return View(new TrainingViewModel
+                //{
+                //    Date = model.Date,
+                //    Exercises = new List<ExerciseViewModel>()
+                //});
+                return RedirectToAction("index", "home");
+
+            }
+
+            if (existingTraining == null)
             {
                 var training = new Training
                 {
@@ -112,6 +132,7 @@ namespace GymTrack.Controllers
             {
                 existingTraining.Exercises.Clear();
 
+                
                 foreach (var ex in model.Exercises)
                 {
                     var exercise = Context.Exercise.FirstOrDefault(e => e.Name == ex.Name);

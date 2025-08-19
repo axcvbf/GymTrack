@@ -44,21 +44,24 @@
             <button type="submit">Save Training</button>
         
         <div id="exerciseList">
-        @for (int i=0; i < Model.Exercises.Count; i++)
+        @if(Model.Exercises != null && Model.Exercises.Any())
         {
-            var ex = Model.Exercises[i];
-            <div class="exerciseList" data-exercise-index="@i">
-                <span>@ex.Name - @ex.Weight kg for @ex.Reps repetitions@*  x @ex.Sets serii *@</span>
-                <button type="button" style="margin-left:10px" onclick="removeExercise(@i)">Delete</button>
+            for (int i=0; i < Model.Exercises.Count; i++)
+            {
+                var ex = Model.Exercises[i];
+                <div class="exerciseList" data-exercise-index="@i">
+                    <span>@ex.Name - @ex.Weight kg for @ex.Reps repetitions@*  x @ex.Sets serii *@</span>
+                    <button type="button" style="margin-left:10px" onclick="removeExercise(@i)">Delete</button>
                 
-                <input type="hidden" name="Exercises[@i].Name" value="@ex.Name" data-owner="@i"/>
-                <input type="hidden" name="Exercises[@i].Category" value="@ex.Category" data-owner="@i" />
-                <input type="hidden" name="Exercises[@i].Weight" value="@ex.Weight" data-owner="@i" />
-                <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />@* 
-                <input type="hidden" name="Exercises[@i].Sets" value="@ex.Sets" data-owner="@i" /> *@
+                    <input type="hidden" name="Exercises[@i].Name" value="@ex.Name" data-owner="@i"/>
+                    <input type="hidden" name="Exercises[@i].Category" value="@ex.Category" data-owner="@i" />
+                    <input type="hidden" name="Exercises[@i].Weight" value="@ex.Weight" data-owner="@i" />
+                    <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />@* 
+                    <input type="hidden" name="Exercises[@i].Sets" value="@ex.Sets" data-owner="@i" /> *@
 
-            </div>
-        }
+                </div>
+            }
+            }
         </div>
     </form>
 
