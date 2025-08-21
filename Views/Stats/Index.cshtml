@@ -1,9 +1,9 @@
 ﻿@using GymTrack.Areas.Identity.Data
-@using GymTrack.Models.DTOs
+@using GymTrack.ViewModels
 @using Microsoft.AspNetCore.Identity
 
 @inject UserManager<GymUser> UserManager
-@model UserStatsDto
+@model StatsViewModel
 
 
 <div class="secondheader">
@@ -14,10 +14,22 @@
     @if(Model != null)
     {
     <div class="userStats">
-        <div>Trainings: @Model.TrainingsCount</div>
-        <div>Sets: @Model.SetsCount</div>
-        <div>Reps: @Model.RepsCount</div>
-        <div>Total Weight: @Model.TotalWeight</div>
+        <div>Trainings: @Model.UserStats.TrainingsCount</div>
+        <div>Sets: @Model.UserStats.SetsCount</div>
+        <div>Reps: @Model.UserStats.RepsCount</div>
+        <div>Total Weight: @Model.UserStats.TotalWeight</div>
     </div>
     }
+
+    <div class="row">
+        <div class="col-md-4"><canvas id="benchpress"></canvas></div>
+        <div class="col-md-4"><canvas id="incline"></canvas></div>
+        <div class="col-md-4"><canvas id="shoulderpress"></canvas></div>
+    </div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+</script>

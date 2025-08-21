@@ -1,4 +1,4 @@
-﻿using GymTrack.Areas.Identity.Data;
+﻿    using GymTrack.Areas.Identity.Data;
 using GymTrack.Data;
 using GymTrack.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +37,45 @@ namespace GymTrack.Controllers
                 })
                 .FirstOrDefaultAsync();
 
-            return View(stats);
+            var bench = await Context.ExerciseDatas
+                .Where(e => e.Training.GymUserId == userId && e.ExerciseId == 1)
+                .OrderBy(e => e.Training.Date)
+                .Select(e => new ExerciseProgressDTO
+                {
+                    Date = e.Training.Date,
+                    Weight = e.Weight
+                })
+                .ToListAsync();
+
+            var incline = await Context.ExerciseDatas
+                .Where(e => e.Training.GymUserId == userId && e.ExerciseId == 2)
+                .OrderBy(e => e.Training.Date)
+                .Select(e => new ExerciseProgressDTO
+                {
+                    Date = e.Training.Date,
+                    Weight = e.Weight
+                })
+                .ToListAsync();
+
+            var shoulderpress = await Context.ExerciseDatas
+                .Where(e => e.Training.GymUserId == userId && e.ExerciseId == 3)
+                .OrderBy(e => e.Training.Date)
+                .Select(e => new ExerciseProgressDTO
+                {
+                    Date = e.Training.Date,
+                    Weight = e.Weight
+                })
+                .ToListAsync();
+
+            var model = new
+            {
+                UserStats = stats,
+                Benchpress = bench,
+                Incline = incline,
+                Shoulderpress = shoulderpress
+            };
+
+            return View(model);
         }
     }
 }
