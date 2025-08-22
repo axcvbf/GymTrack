@@ -1,6 +1,7 @@
 using GymTrack.Areas.Identity.Data;
-using GymTrack.Data;
+using GymTrack.Interfaces;
 using GymTrack.Models;
+using GymTrack.Persistence;
 using GymTrack.ViewModels;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,31 +16,26 @@ namespace GymTrack.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> Logger;
+        private readonly ITrainingRepository TrainingRepository;
         private readonly UserManager<GymUser> UserManager;
-        private readonly GymDbContext Context;
-        public HomeController(ILogger<HomeController> logger, UserManager<GymUser> userManager, GymDbContext context)
+
+        public HomeController(ITrainingRepository trainingRepository, UserManager<GymUser> userManager)
         {
-            Context = context;
+            TrainingRepository = trainingRepository;
             UserManager = userManager;
-            Logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewData["UserID"] = UserManager.GetUserId(this.User);
+            var userId = UserManager.GetUserId(this.User);
+            ViewData["UserID"] = userId;
 
             int month = Request.Query["month"].Count > 0 ? int.Parse(Request.Query["month"]) : DateTime.Now.Month;
             int year = Request.Query["year"].Count > 0 ? int.Parse(Request.Query["year"]) : DateTime.Now.Year;
 
             DateTime currentDate = new DateTime(year, month, 1);
 
-            var user = await UserManager.GetUserAsync(User);
-            var trainings = await Context.Trainings
-                .Where(t => t.GymUserId == user.Id &&
-                            t.Date.Month == currentDate.Month &&
-                            t.Date.Year == currentDate.Year)
-                .ToListAsync();
+            var trainings = await TrainingRepository.GetTrainingsForMonthAsync(userId, month, year);
 
             var model = new HomeViewModel
             {

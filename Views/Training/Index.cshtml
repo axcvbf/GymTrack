@@ -1,20 +1,14 @@
 ﻿@using GymTrack.ViewModels
 @model TrainingViewModel
 
-@{
-    ViewBag.Title = "Add Training";
-}
+@{ViewBag.Title = "Add Training";}
 
 <div class="secondheader">
     <h2> Training for @Model.Date.ToShortDateString()</h2>
 </div>
 
-
-
-
 <div id="trainingContainer">
     <form id="exerciseForm" method="post" action="/Training/Index">
-@*             @Html.Label("Date") *@
             <input type="hidden" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
 
             @Html.Label("Category")
@@ -35,10 +29,7 @@
 
             @Html.Label("Repetitions")
             <input type="number" id="repsInput"/>
-@* 
-            @Html.Label("Series")
-            <input type="number" id="setsInput" />
- *@
+
             <button type="button" onclick="addExercise()">Add Exercise</button>
 
             <button type="submit">Save Training</button>
@@ -50,27 +41,20 @@
             {
                 var ex = Model.Exercises[i];
                 <div class="exerciseList" data-exercise-index="@i">
-                    <span>@ex.Name - @ex.Weight kg for @ex.Reps repetitions@*  x @ex.Sets serii *@</span>
+                    <span>@ex.Name - @ex.Weight kg for @ex.Reps repetitions</span>
                     <button type="button" style="margin-left:10px" onclick="removeExercise(@i)">Delete</button>
-                
                     <input type="hidden" name="Exercises[@i].Name" value="@ex.Name" data-owner="@i"/>
                     <input type="hidden" name="Exercises[@i].Category" value="@ex.Category" data-owner="@i" />
                     <input type="hidden" name="Exercises[@i].Weight" value="@ex.Weight" data-owner="@i" />
-                    <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />@* 
-                    <input type="hidden" name="Exercises[@i].Sets" value="@ex.Sets" data-owner="@i" /> *@
-
+                    <input type="hidden" name="Exercises[@i].Reps" value="@ex.Reps" data-owner="@i" />
                 </div>
             }
-            }
+        }
         </div>
     </form>
-
-
 </div>
 
-
 <script>
-
     const exercises = {
         "Push": ["Benchpress", "Shoulderpress", "Incline"],
         "Pull": ["Pullups", "SeaatedRow", "Biceps"],
@@ -102,7 +86,6 @@
                 option.text = name;
                 exerciseSelect.appendChild(option);
             });
-
         }
     }
 

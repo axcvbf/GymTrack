@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace GymTrack.Data;
+namespace GymTrack.Persistence;
 
 public class GymDbContext : IdentityDbContext<GymUser>
 {
@@ -34,6 +34,6 @@ public class GymDbContext : IdentityDbContext<GymUser>
     }
 
     public DbSet<Training> Trainings { get; set; }
-    public DbSet<Exercise> Exercise { get; set; } 
+    public DbSet<Exercise> Exercise { get; set; }
     public DbSet<ExerciseData> ExerciseDatas { get; set; }
 }
