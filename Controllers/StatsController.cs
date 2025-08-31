@@ -1,4 +1,5 @@
-﻿using GymTrack.Areas.Identity.Data;
+﻿using AutoMapper;
+using GymTrack.Areas.Identity.Data;
 using GymTrack.Interfaces;
 using GymTrack.Models.DTOs;
 using GymTrack.Persistence;
@@ -11,35 +12,22 @@ namespace GymTrack.Controllers
 {
     public class StatsController : Controller
     {
-        private readonly UserManager<GymUser> UserManager;
-        private readonly IStatsService StatsService;
-        public StatsController(UserManager<GymUser> userManager, IStatsService statsService)
+        private readonly IStatsService _statsService;
+        private readonly IMapper _mapper;
+        public StatsController(IStatsService statsService, IMapper mapper)
         {
-            UserManager = userManager;
-            StatsService = statsService;
+            _statsService = statsService;
+            _mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) 
                 return View(null);
 
-            var userId = UserManager.GetUserId(this.User);
-            ViewData["UserId"] = userId;
+            var dto = await _statsService.GetStatsDataAsync();
+            var vm = _mapper.Map<StatsViewModel>(dto);
 
-            var stats = await StatsService.GetUserStatsAsync(userId);
-            var bench = await StatsService.GetExerciseProgressAsync(userId, 1);
-            var incline = await StatsService.GetExerciseProgressAsync(userId, 1);
-            var shoulderpress = await StatsService.GetExerciseProgressAsync(userId, 1);
-
-            var model = new StatsViewModel
-            {
-                UserStats = stats,
-                Benchpress = bench,
-                Incline = incline,
-                Shoulderpress = shoulderpress
-            };
-
-            return View(model);
+            return View(vm);
         }
     }
 }

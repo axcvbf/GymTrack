@@ -1,6 +1,8 @@
-﻿using GymTrack.Areas.Identity.Data;
+﻿using AutoMapper;
+using GymTrack.Areas.Identity.Data;
 using GymTrack.Interfaces;
 using GymTrack.Models;
+using GymTrack.Models.DTOs;
 using GymTrack.Persistence;
 using GymTrack.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -12,30 +14,25 @@ namespace GymTrack.Controllers
 {
     public class TrainingController : Controller
     {
-        private readonly ITrainingService TrainingService;
-        private readonly UserManager<GymUser> UserManager;
+        private readonly ITrainingService _trainingService;
+        private readonly IMapper _mapper;
 
-        public TrainingController(ITrainingService trainingService, UserManager<GymUser> userManager)
+        public TrainingController(ITrainingService trainingService, IMapper mapper)
         {
-            TrainingService = trainingService;
-            UserManager = userManager;
+            _mapper = mapper;
+            _trainingService = trainingService;
         }
         public async Task<IActionResult> Index(DateTime date)
         {
-            var userId = UserManager.GetUserId(this.User);
-            ViewData["UserID"] = userId;
-
-            var model = await TrainingService.GetTrainingViewModelAsync(userId, date);
-
-            return View(model);
+            var dto = await _trainingService.GetTrainingDataAsync(date);
+            var vm = _mapper.Map<TrainingViewModel>(dto);
+            return View(vm);
         }
         [HttpPost]
-        public async Task<IActionResult> Index(TrainingViewModel model)
+        public async Task<IActionResult> Index(TrainingViewModel vm)
         {
-            var userId = UserManager.GetUserId(User);
-
-            await TrainingService.SaveTrainingAsync(userId, model);
-
+            var dto = _mapper.Map<TrainingDto>(vm);
+            await _trainingService.SaveTrainingAsync(dto);
             return RedirectToAction("Index", "Home");
         }
     }

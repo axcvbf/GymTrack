@@ -1,3 +1,4 @@
+using AutoMapper;
 using GymTrack.Areas.Identity.Data;
 using GymTrack.Interfaces;
 using GymTrack.Models;
@@ -16,34 +17,22 @@ namespace GymTrack.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ITrainingRepository TrainingRepository;
-        private readonly UserManager<GymUser> UserManager;
-
-        public HomeController(ITrainingRepository trainingRepository, UserManager<GymUser> userManager)
+        private readonly IHomeService _homeService;
+        private readonly IMapper _mapper;
+        public HomeController(IHomeService homeService, IMapper mapper)
         {
-            TrainingRepository = trainingRepository;
-            UserManager = userManager;
+            _homeService = homeService;
+            _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? month, int? year)
         {
-            var userId = UserManager.GetUserId(this.User);
-            ViewData["UserID"] = userId;
+            int m = month ?? DateTime.Now.Month; 
+            int y = year ?? DateTime.Now.Year;
 
-            int month = Request.Query["month"].Count > 0 ? int.Parse(Request.Query["month"]) : DateTime.Now.Month;
-            int year = Request.Query["year"].Count > 0 ? int.Parse(Request.Query["year"]) : DateTime.Now.Year;
-
-            DateTime currentDate = new DateTime(year, month, 1);
-
-            var trainings = await TrainingRepository.GetTrainingsForMonthAsync(userId, month, year);
-
-            var model = new HomeViewModel
-            {
-                currentDate = currentDate,
-                trainingDays = trainings.Select(t => t.Date.Date).ToList()
-            };
-
-            return View(model);
+            var dto = await _homeService.GetHomeDataAsync(m, y);
+            var vm = _mapper.Map<HomeViewModel>(dto);            
+            return View(vm);
         }
 
         public IActionResult Privacy()

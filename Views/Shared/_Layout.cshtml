@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using GymTrack.Interfaces
+@inject IUserContext _userContext
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,7 +38,7 @@
 
     <footer class="footer">
             <div class="footer_left">&copy; 2025 - GymTrack</div>
-            <div class="footeer_right">User ID: @ViewData["UserID"]</div>
+            <div class="footeer_right">User ID: @_userContext.GetUserId()</div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,8 +1,8 @@
-﻿using GymTrack.Models.DTOs;
+﻿using GymTrack.Persistence;
 
-namespace GymTrack.ViewModels
+namespace GymTrack.Models.DTOs
 {
-    public class StatsViewModel
+    public class StatsDto
     {
         public UserStatsDto UserStats { get; set; }
         public List<ExerciseProgressDto> Benchpress { get; set; }

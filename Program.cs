@@ -4,6 +4,7 @@ using GymTrack.Areas.Identity.Data;
 using GymTrack.Persistence;
 using GymTrack.Interfaces;
 using GymTrack.Services;
+using GymTrack.Mappings;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GymDbContextConnection") ?? throw new InvalidOperationException("Connection string 'GymDbContextConnection' not found.");
 
@@ -13,10 +14,15 @@ builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireCo
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddAutoMapper(typeof(TrainingProfile));
+builder.Services.AddAutoMapper(typeof(HomeProfile));
+builder.Services.AddAutoMapper(typeof(StatsProfile));
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
 builder.Services.AddScoped<ITrainingService, TrainingService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
+builder.Services.AddScoped<IUserContext, UserContext>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

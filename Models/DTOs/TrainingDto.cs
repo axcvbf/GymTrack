@@ -1,8 +1,8 @@
 ﻿namespace GymTrack.Models.DTOs
 {
-    public class ExerciseProgressDto
+    public class TrainingDto
     {
         public DateTime Date { get; set; }
-        public double Weight { get; set; }
+        public List<ExerciseDto> Exercises { get; set; }
     }
 }

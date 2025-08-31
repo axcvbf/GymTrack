@@ -5,14 +5,29 @@ namespace GymTrack.Services
 {
     public class StatsService : IStatsService
     {
-        private readonly ITrainingRepository TrainingRepository;
-        public StatsService(ITrainingRepository trainingRepository)
+        private readonly ITrainingRepository _trainingRepository;
+        private readonly IUserContext _userContext;
+        public StatsService(ITrainingRepository trainingRepository, IUserContext userContext)
         {
-            TrainingRepository = trainingRepository;
+            _trainingRepository = trainingRepository;
+            _userContext = userContext;
         }
-        public async Task<UserStatsDto> GetUserStatsAsync(string userId)
+
+        public async Task<StatsDto> GetStatsDataAsync()
         {
-            var trainings = await TrainingRepository.GetAllTrainingsForUserAsync(userId);
+            return new StatsDto
+            {
+                UserStats = await GetUserStatsAsync(),
+                Benchpress = await GetExerciseProgressAsync(1),
+                Incline = await GetExerciseProgressAsync(2),
+                Shoulderpress = await GetExerciseProgressAsync(3),
+            };
+        }
+
+        public async Task<UserStatsDto> GetUserStatsAsync()
+        {
+            var userId = _userContext.GetUserId();
+            var trainings = await _trainingRepository.GetAllTrainingsForUserAsync(userId);
             var exercises = trainings.SelectMany(t => t.Exercises).ToList();
 
             return new UserStatsDto
@@ -24,15 +39,16 @@ namespace GymTrack.Services
             };
         }
 
-        public async Task<List<ExerciseProgressDTO>>GetExerciseProgressAsync(string userId, int exerciseId)
+        public async Task<List<ExerciseProgressDto>>GetExerciseProgressAsync(int exerciseId)
         {
-            var trainings = await TrainingRepository.GetAllTrainingsForUserAsync(userId);
+            var userId = _userContext.GetUserId() ;
+            var trainings = await _trainingRepository.GetAllTrainingsForUserAsync(userId);
 
             return trainings
                 .SelectMany(t => t.Exercises)
                 .Where(e => e.ExerciseId == exerciseId)
                 .OrderBy(e => e.Training.Date)
-                .Select(e => new ExerciseProgressDTO
+                .Select(e => new ExerciseProgressDto
                 {
                     Date = e.Training.Date,
                     Weight = e.Weight

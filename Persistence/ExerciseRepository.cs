@@ -6,20 +6,20 @@ namespace GymTrack.Persistence
 {
     public class ExerciseRepository : IExerciseRepository
     {
-        private readonly GymDbContext GymDbContext;
+        private readonly GymDbContext _gymDbContext;
         public ExerciseRepository(GymDbContext gymDbContext)
         {
-            GymDbContext = gymDbContext;
+            _gymDbContext = gymDbContext;
         }
 
         public async Task<Exercise?> GetByNameAsync(string name)
         {
-            return await GymDbContext.Exercise.FirstOrDefaultAsync(e => e.Name == name);
+            return await _gymDbContext.Exercise.FirstOrDefaultAsync(e => e.Name == name);
         }
 
         public async Task AddExerciseAsync(Exercise exercise)
         {
-            await GymDbContext.Exercise.AddAsync(exercise);
+            await _gymDbContext.Exercise.AddAsync(exercise);
         }
     }
 }

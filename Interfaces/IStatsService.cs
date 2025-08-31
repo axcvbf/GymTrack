@@ -4,7 +4,8 @@ namespace GymTrack.Interfaces
 {
     public interface IStatsService
     {
-        Task<UserStatsDto> GetUserStatsAsync(string userId);
-        Task<List<ExerciseProgressDTO>> GetExerciseProgressAsync(string userId, int exerciseId);
+        Task<StatsDto> GetStatsDataAsync();
+        Task<UserStatsDto> GetUserStatsAsync();
+        Task<List<ExerciseProgressDto>> GetExerciseProgressAsync( int exerciseId);
     }
 }

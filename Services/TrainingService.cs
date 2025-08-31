@@ -1,31 +1,34 @@
 ﻿using GymTrack.Interfaces;
 using GymTrack.Models;
+using GymTrack.Models.DTOs;
 using GymTrack.Persistence;
-using GymTrack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace GymTrack.Services
 {
     public class TrainingService : ITrainingService
     {
-        private readonly ITrainingRepository TrainingRepository;
-        private readonly IExerciseRepository ExerciseRepository;
-        public TrainingService(ITrainingRepository trainingRepository, IExerciseRepository exerciseRepository)
+        private readonly ITrainingRepository _trainingRepository;
+        private readonly IExerciseRepository _exerciseRepository;
+        private readonly IUserContext _userContext;
+        public TrainingService(ITrainingRepository trainingRepository, IExerciseRepository exerciseRepository, IUserContext userContext)
         {
-            TrainingRepository = trainingRepository;
-            ExerciseRepository = exerciseRepository;
+            _trainingRepository = trainingRepository;
+            _exerciseRepository = exerciseRepository;
+            _userContext = userContext;
         }
 
-        public async Task<TrainingViewModel> GetTrainingViewModelAsync(string userId, DateTime date)
+        public async Task<TrainingDto> GetTrainingDataAsync(DateTime date)
         {
-            var training = await TrainingRepository.GetTrainingAsync(userId, date);
+            var userId = _userContext.GetUserId();
+            var training = await _trainingRepository.GetTrainingAsync(userId, date);
 
             if (training != null)
             {
-                return new TrainingViewModel
+                return new TrainingDto
                 {
                     Date = training.Date,
-                    Exercises = training.Exercises.Select(e => new ExerciseViewModel
+                    Exercises = training.Exercises.Select(e => new ExerciseDto
                     {
                         Name = e.Exercise.Name,
                         Category = e.Exercise.Category,
@@ -35,24 +38,25 @@ namespace GymTrack.Services
                 };
             }
 
-            return new TrainingViewModel
+            return new TrainingDto
             {
                 Date = date,
-                Exercises = new List<ExerciseViewModel>()
+                Exercises = new List<ExerciseDto>()
             };
         }
 
-        public async Task SaveTrainingAsync(string userId, TrainingViewModel model)
+        public async Task SaveTrainingAsync(TrainingDto model)
         {
-            var existingTraining = await TrainingRepository.GetTrainingAsync(userId, model.Date);
+            var userId = _userContext.GetUserId();
+            var existingTraining = await _trainingRepository.GetTrainingAsync(userId, model.Date);
 
             if (model.Exercises == null || !model.Exercises.Any())
             {
                 if (existingTraining != null)
                 {
 
-                    await TrainingRepository.DeleteTrainingAsync(existingTraining);
-                    await TrainingRepository.SaveChangesAsync();
+                    await _trainingRepository.DeleteTrainingAsync(existingTraining);
+                    await _trainingRepository.SaveChangesAsync();
                 }
                 return;
 
@@ -69,13 +73,13 @@ namespace GymTrack.Services
 
                 foreach (var ex in model.Exercises)
                 {
-                    var exercise = await ExerciseRepository.GetByNameAsync(ex.Name);
+                    var exercise = await _exerciseRepository.GetByNameAsync(ex.Name);
 
                     if (exercise == null)
                     {
                         exercise = new Exercise { Name = ex.Name, Category = ex.Category };
-                        await ExerciseRepository.AddExerciseAsync(exercise);
-                        await TrainingRepository.SaveChangesAsync();
+                        await _exerciseRepository.AddExerciseAsync(exercise);
+                        await _trainingRepository.SaveChangesAsync();
                     }
 
                     training.Exercises.Add(new ExerciseData
@@ -85,7 +89,7 @@ namespace GymTrack.Services
                         Reps = ex.Reps,
                     });
                 }
-                await TrainingRepository.AddTrainingAsync(training);
+                await _trainingRepository.AddTrainingAsync(training);
             }
             else
             {
@@ -94,13 +98,13 @@ namespace GymTrack.Services
 
                 foreach (var ex in model.Exercises)
                 {
-                    var exercise = await ExerciseRepository.GetByNameAsync(ex.Name);
+                    var exercise = await _exerciseRepository.GetByNameAsync(ex.Name);
 
                     if (exercise == null)
                     {
                         exercise = new Exercise { Name = ex.Name, Category = ex.Category };
-                        await ExerciseRepository.AddExerciseAsync(exercise);
-                        await TrainingRepository.SaveChangesAsync();
+                        await _exerciseRepository.AddExerciseAsync(exercise);
+                        await _trainingRepository.SaveChangesAsync();
                     }
 
                     existingTraining.Exercises.Add(new ExerciseData
@@ -110,10 +114,10 @@ namespace GymTrack.Services
                         Reps = ex.Reps,
                     });
                 }
-                await TrainingRepository.UpdateTrainingAsync(existingTraining);
+                await _trainingRepository.UpdateTrainingAsync(existingTraining);
             }
 
-            await TrainingRepository.SaveChangesAsync();
+            await _trainingRepository.SaveChangesAsync();
         }
     }
 }
