@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
-using GymTrack.Areas.Identity.Data;
 using GymTrack.Interfaces;
-using GymTrack.Models;
 using GymTrack.Models.DTOs;
-using GymTrack.Persistence;
 using GymTrack.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GymTrack.Controllers
 {
