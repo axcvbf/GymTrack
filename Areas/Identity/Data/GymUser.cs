@@ -15,11 +15,11 @@ namespace GymTrack.Areas.Identity.Data;
 public class GymUser : IdentityUser
 {
     [PersonalData]
-    [Column(TypeName = "nvarchar(100)")]
+    [MaxLength(100)]
     public string FirstName { get; set; }
 
     [PersonalData]
-    [Column(TypeName = "nvarchar(100)")]
+    [MaxLength(100)]
     public string LastName { get; set; }
 
     public ICollection<Training> Trainings { get; set; }

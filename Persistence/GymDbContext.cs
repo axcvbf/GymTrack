@@ -17,10 +17,17 @@ public class GymDbContext : IdentityDbContext<GymUser>
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<Training>()
+        builder.Entity<Training>(entity =>
+        {
+            entity
+            .Property(t => t.Date)
+            .HasColumnType("timestamp without time zone");
+
+            entity
             .HasOne(t => t.GymUser)
             .WithMany(u => u.Trainings)
             .HasForeignKey(t => t.GymUserId);
+        });
 
         builder.Entity<ExerciseData>()
             .HasOne(ed => ed.Exercise)

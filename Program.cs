@@ -8,7 +8,7 @@ using GymTrack.Mappings;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GymDbContextConnection") ?? throw new InvalidOperationException("Connection string 'GymDbContextConnection' not found.");
 
-builder.Services.AddDbContext<GymDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<GymDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GymDbContext>();
 
