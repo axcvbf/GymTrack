@@ -8,7 +8,7 @@ using GymTrack.Mappings;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GymDbContextConnection") ?? throw new InvalidOperationException("Connection string 'GymDbContextConnection' not found.");
 
-builder.Services.AddDbContext<GymDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<GymDbContext>(options => options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure()));
 
 builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GymDbContext>();
 
@@ -33,6 +33,26 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContext>();
+    var retries = 10;
+    var delay = TimeSpan.FromSeconds(3);
+
+    for(int i = 0; i < retries; i++)
+    {
+        try
+        {
+            dbContext.Database.Migrate();
+            break;
+        }
+        catch (Npgsql.NpgsqlException)
+        {
+           System.Threading.Thread.Sleep(delay);
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
