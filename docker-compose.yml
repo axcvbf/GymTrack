@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: gymtrack-app
+    depends_on:
+      - db
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__GymDbContextConnection=Host=db;Port=5432;Database=GymTrackDB;Username=user;Password=password
+    networks:
+      - gymtrack-net
+
+  db:
+    image: postgres:15
+    container_name: gymtrack-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: GymTrackDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gymtrack-net
+
+volumes:
+  postgres_data:
+
+networks:
+  gymtrack-net:

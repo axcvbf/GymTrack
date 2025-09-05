@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymTrack.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20250903091936_Init Postgres")]
-    partial class InitPostgres
+    [Migration("20250905124249_Innitial")]
+    partial class Innitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,7 @@ namespace GymTrack.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("GymUserId")
                         .IsRequired()
