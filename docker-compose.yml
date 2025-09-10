@@ -10,7 +10,7 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__GymDbContextConnection=Host=db;Port=5432;Database=GymTrackDB;Username=user;Password=password
+      - ConnectionStrings__GymDbContextConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     networks:
       - gymtrack-net
 
@@ -19,9 +19,9 @@ services:
     container_name: gymtrack-db
     restart: always
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: GymTrackDB
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSOWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -29,8 +29,24 @@ services:
     networks:
       - gymtrack-net
 
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: npm
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - gymtrack-net
+
 volumes:
   postgres_data:
+  npm_data:
+  npm_letsencrypt:
 
 networks:
   gymtrack-net:
