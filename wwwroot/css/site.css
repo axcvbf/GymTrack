@@ -135,7 +135,6 @@ footer {
     display: flex;
     justify-content: center;
     align-content: center;
-    margin-top: auto;
 }
 
 .graphs-row canvas {
@@ -146,6 +145,7 @@ footer {
 .exerciseSelect {
     margin-top: auto;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 #exerciseList{ 
