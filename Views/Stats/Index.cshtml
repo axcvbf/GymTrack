@@ -7,7 +7,7 @@
 
 
 <div class="secondheader">
-    <h2>Data for @UserManager.GetUserName(User)</h2>
+    <h5>Statistics for @UserManager.GetUserName(User)</h5>
 </div>
 
 <div class="trainingContainer">
@@ -21,15 +21,23 @@
     </div>
     }
 
-    <div class="row">
-        <div class="col-md-4"><canvas id="benchpress"></canvas></div>
-        <div class="col-md-4"><canvas id="incline"></canvas></div>
-        <div class="col-md-4"><canvas id="shoulderpress"></canvas></div>
+    <div class="exerciseSelect">
+        <label for="exerciseGroup">Select group</label>
+        <select id="exerciseGroup">
+            <option value="push" selected>Push</option>
+            <option value="pull">Pull</option>
+            <option value="legs">Legs</option>
+        </select>
+    </div>
+
+    <div id="graphs" class="graphs-row">
+        <div class="row">
+            <div class="col-md-4"><canvas id="benchpress"></canvas></div>
+            <div class="col-md-4"><canvas id="incline"></canvas></div>
+            <div class="col-md-4"><canvas id="shoulderpress"></canvas></div>
+        </div>
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-
-</script>
+<script src="~/js/stats-charts.js"></script>

@@ -123,8 +123,29 @@ footer {
     margin-top: 24px;
 }
 
-#trainingContainer {
+.trainingContainer {
     display: flex;
+    flex-direction: column;
+    min-height: 75vh;
+    font-size: 16px;
+}
+
+
+#graphs {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: auto;
+}
+
+.graphs-row canvas {
+    max-width: 30%;
+    width: 30%;
+}
+
+.exerciseSelect {
+    margin-top: auto;
+    text-align: center;
 }
 
 #exerciseList{ 
