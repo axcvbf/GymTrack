@@ -5,14 +5,35 @@ using GymTrack.Persistence;
 using GymTrack.Interfaces;
 using GymTrack.Services;
 using GymTrack.Mappings;
+using Serilog;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Shared;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GymDbContextConnection") ?? throw new InvalidOperationException("Connection string 'GymDbContextConnection' not found.");
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.File("Logs/all_log.txt", rollingInterval: RollingInterval.Day)
+
+    .WriteTo.Logger(lc => lc
+        .Filter.ByIncludingOnly(e => e.Properties.ContainsKey("Business"))
+        .WriteTo.File("Logs/business_log.txt", rollingInterval: RollingInterval.Day))
+
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 builder.Services.AddDbContext<GymDbContext>(options => options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure()));
-
 builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GymDbContext>();
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(
+//    options =>
+//{
+//    var policy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//    options.Filters.Add(new AuthorizeFilter(policy));
+//}
+);
 builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(TrainingProfile));
 builder.Services.AddAutoMapper(typeof(HomeProfile));
@@ -31,6 +52,11 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
 });
+
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.LoginPath = "/Identity/Account/Login";
+//});
 
 var app = builder.Build();
 

@@ -1,14 +1,14 @@
 ﻿const exerciseGroups = {
-    push: [1, 2, 3],
+    push: [1, 4, 3],
     pull: [8, 7, 6],
-    legs: [5, 4, 9]
+    legs: [5, 2, 9]
 };
 
 const exerciseLabels = {
     1: "Bench Press",
-    2: "Incline Bench Press",
+    2: "Quads",
     3: "Shoulder Press",
-    4: "Quads",
+    4: "Incline Bench Press",
     5: "Legpress",
     6: "Pull Up",
     7: "Seated Row",

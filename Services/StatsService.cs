@@ -1,5 +1,6 @@
 ﻿using GymTrack.Interfaces;
 using GymTrack.Models.DTOs;
+using Serilog;
 
 namespace GymTrack.Services
 {
@@ -7,10 +8,12 @@ namespace GymTrack.Services
     {
         private readonly ITrainingRepository _trainingRepository;
         private readonly IUserContext _userContext;
-        public StatsService(ITrainingRepository trainingRepository, IUserContext userContext)
+        private readonly ILogger<StatsService> _logger;
+        public StatsService(ITrainingRepository trainingRepository, IUserContext userContext, ILogger<StatsService> logger)
         {
             _trainingRepository = trainingRepository;
             _userContext = userContext;
+            _logger = logger;
         }
 
         public async Task<StatsDto> GetStatsDataAsync()
@@ -27,16 +30,29 @@ namespace GymTrack.Services
         public async Task<UserStatsDto> GetUserStatsAsync()
         {
             var userId = _userContext.GetUserId();
-            var trainings = await _trainingRepository.GetAllTrainingsForUserAsync(userId);
-            var exercises = trainings.SelectMany(t => t.Exercises).ToList();
-
-            return new UserStatsDto
+            try
             {
-                TrainingsCount = trainings.Count(),
-                SetsCount = exercises.Count(),
-                RepsCount = exercises.Sum(e => e.Reps),
-                TotalWeight = exercises.Sum(e => e.Weight * e.Reps)
-            };
+                var trainings = await _trainingRepository.GetAllTrainingsForUserAsync(userId);
+                var exercises = trainings.SelectMany(t => t.Exercises).ToList();
+
+                Log.ForContext("Business", true)
+                    .Information("User {UserId} requested user stats information", userId);
+
+                return new UserStatsDto
+                {
+                    TrainingsCount = trainings.Count(),
+                    SetsCount = exercises.Count(),
+                    RepsCount = exercises.Sum(e => e.Reps),
+                    TotalWeight = exercises.Sum(e => e.Weight * e.Reps)
+                };
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Failed to load stats for user {UserId}", userId);
+                Log.ForContext("Business", true)
+                    .Warning("User {UserId} requested stats but an error occured", userId);
+
+                throw;
+            }
         }
 
         public async Task<List<ExerciseProgressDto>>GetExerciseProgressAsync(int exerciseId)

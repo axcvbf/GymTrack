@@ -1,5 +1,6 @@
 ﻿using GymTrack.Interfaces;
 using GymTrack.Models.DTOs;
+using Serilog;
 
 namespace GymTrack.Services
 {
@@ -7,24 +8,41 @@ namespace GymTrack.Services
     {
         private readonly IUserContext _userContext;
         private readonly ITrainingRepository _trainingRepository;
-        public HomeService(IUserContext userContext, ITrainingRepository trainingRepository)
+        private readonly ILogger<HomeService> _logger;
+        public HomeService(IUserContext userContext, ITrainingRepository trainingRepository, ILogger<HomeService> logger)
         {
             _userContext = userContext;
             _trainingRepository = trainingRepository;
+            _logger = logger;
         }
 
         public async Task<HomeDto> GetHomeDataAsync(int month, int year)
         {
             var userId = _userContext.GetUserId();
-            var trainings = await _trainingRepository.GetTrainingsForMonthAsync(userId, month, year);
             DateTime currentDate = new DateTime(year, month, 1);
-
-            return new HomeDto
+            try
             {
-                CurrentDate = currentDate,
-                UserId = userId,
-                Trainingdays = trainings.Select(t => t.Date).ToList(),
-            };
+                var trainings = await _trainingRepository.GetTrainingsForMonthAsync(userId, month, year);
+
+                Log.ForContext("Business", true)
+                    .Information("User {UserId} loaded calendar for month: {Month} year: {Year}", userId, month, year);
+
+                return new HomeDto
+                {
+                    CurrentDate = currentDate,
+                    UserId = userId,
+                    Trainingdays = trainings.Select(t => t.Date).ToList(),
+                };
+            }
+
+            catch (Exception ex) {
+                _logger.LogError(ex, "Error while trying to load calendar for {UserId} on {Date}", userId, currentDate);
+
+                Log.ForContext("Business", true)
+                    .Warning("User {UserId} attempted to load calendar for {Date}, but an error occured", userId, currentDate);
+
+                throw;
+            }
         }
     }
 }
