@@ -26,13 +26,13 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<GymDbContext>(options => options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure()));
 builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GymDbContext>();
 builder.Services.AddControllersWithViews(
-//    options =>
-//{
-//    var policy = new AuthorizationPolicyBuilder()
-//        .RequireAuthenticatedUser()
-//        .Build();
-//    options.Filters.Add(new AuthorizeFilter(policy));
-//}
+    options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}
 );
 builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(TrainingProfile));
@@ -44,6 +44,7 @@ builder.Services.AddScoped<ITrainingService, TrainingService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -53,10 +54,11 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
 });
 
-//builder.Services.ConfigureApplicationCookie(options =>
-//{
-//    options.LoginPath = "/Identity/Account/Login";
-//});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
 
 var app = builder.Build();
 
