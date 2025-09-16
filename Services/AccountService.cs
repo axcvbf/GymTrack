@@ -28,7 +28,7 @@ namespace GymTrack.Services
             {
                 if (user == null)
                 {
-                    _logger.LogError("Failed to log in user {UserId}, user null", user.Id);
+                    _logger.LogError("Failed to log in user, user null");
 
                     return SignInResult.Failed;
                 }
@@ -64,7 +64,13 @@ namespace GymTrack.Services
         {
             try
             {
-                var user = new GymUser { Email = email };
+                var user = new GymUser 
+                {
+                    Email = email,
+                    UserName = email,
+                    FirstName = "N-U-L-L",
+                    LastName = "N-U-L-L"
+                };
                 var result = await _userManager.CreateAsync(user, password);
 
                 if (result.Succeeded)
@@ -74,6 +80,7 @@ namespace GymTrack.Services
                     _logger.LogInformation("User {UserId} registered successfully", user.Id);
                     Log.ForContext("Business", true)
                         .Information("User {UserId} registered successfully", user.Id);
+
                 }
                 else
                 {
