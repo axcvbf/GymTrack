@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using GymTrack.Areas.Identity.Data;
-using GymTrack.Persistence;
-using GymTrack.Interfaces;
-using GymTrack.Services;
-using GymTrack.Mappings;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Shared;
+using GymTrack.Application.Mappings;
+using GymTrack.Application.Interfaces;
+using GymTrack.Application.Services;
+using GymTrack.Domain.Entities;
+using GymTrack.Domain.Interfaces;
+using GymTrack.Infrastructure.Persistence.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GymDbContextConnection") ?? throw new InvalidOperationException("Connection string 'GymDbContextConnection' not found.");
 
@@ -26,14 +27,18 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<GymDbContext>(options => options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure()));
 builder.Services.AddDefaultIdentity<GymUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GymDbContext>();
 builder.Services.AddControllersWithViews(
-    options =>
+    options => {
+        var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+        options.Filters.Add(new AuthorizeFilter(policy));
+    })
+.AddRazorOptions(options =>
 {
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-}
-);
+    options.ViewLocationFormats.Add("/Web/Views/{1}/{0}.cshtml");
+    options.ViewLocationFormats.Add("/Web/Views/Shared/{0}.cshtml");
+
+});
 builder.Services.AddRazorPages();
 builder.Services.AddAutoMapper(typeof(TrainingProfile));
 builder.Services.AddAutoMapper(typeof(HomeProfile));

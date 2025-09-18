@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<GymUser> SignInManager
+@inject UserManager<GymUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class=" nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @UserManager.GetUserName(User)
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+                <a class="dropdown-item" asp-controller="Stats" asp-action="Index">
+                    <i class="fa fa-chart-bar"></i>Statistics
+                </a>
+            </li>
+            <li>
+                <form class="p-0" asp-controller="Account" asp-action="Logout" 
+                    asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                        <button type="submit" class="dropdown-item">
+                        <i class="fa fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+    </li>
+    <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+    </li>
+}
