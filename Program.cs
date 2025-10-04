@@ -10,6 +10,7 @@ using GymTrack.Application.Services;
 using GymTrack.Domain.Entities;
 using GymTrack.Domain.Interfaces;
 using GymTrack.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.HttpOverrides;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("GymDbContextConnection") ?? throw new InvalidOperationException("Connection string 'GymDbContextConnection' not found.");
 
@@ -100,6 +101,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
