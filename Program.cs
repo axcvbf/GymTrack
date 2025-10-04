@@ -101,7 +101,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+
 
 var forwardedHeaderOptions = new ForwardedHeadersOptions
 {
@@ -110,6 +110,12 @@ var forwardedHeaderOptions = new ForwardedHeadersOptions
 forwardedHeaderOptions.KnownNetworks.Clear();
 forwardedHeaderOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedHeaderOptions);
+app.UseRouting();
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Auth? {context.User?.Identity?.IsAuthenticated}, User: {context.User?.Identity?.Name ?? "null"}");
+    await next();
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
