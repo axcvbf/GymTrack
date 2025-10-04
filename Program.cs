@@ -113,7 +113,12 @@ app.UseForwardedHeaders(forwardedHeaderOptions);
 app.UseRouting();
 app.Use(async (context, next) =>
 {
-    Console.WriteLine($"Auth? {context.User?.Identity?.IsAuthenticated}, User: {context.User?.Identity?.Name ?? "null"}");
+    Log.Information("Auth? {Auth}, User: {User}, Scheme: {Scheme}, Host: {Host}, PathBase: {PathBase}",
+        context.User?.Identity?.IsAuthenticated,
+        context.User?.Identity?.Name ?? "null",
+        context.Request.Scheme,
+        context.Request.Host,
+        context.Request.PathBase);
     await next();
 });
 app.UseAuthentication();
