@@ -3,6 +3,10 @@
     background-color: black;
 }
 
+.navbar-brand:hover, .nav-link:hover, nav-item:hover {
+    color: lightgrey;
+}
+
 .login-screen {
     display: flex;
     justify-content: center;
@@ -84,6 +88,7 @@ footer {
 }
 
     .days div {
+        border-radius: 7px;
         font-family: 'Franklin Gothic Medium';
         background-color: #000000;
         font-size: 50px;
@@ -95,6 +100,11 @@ footer {
         align-items: center;
     }
 
+    .days div:hover {
+         box-shadow: 7px 7px 20px red;
+         color: red;
+    }
+
 .day.today {
     background-color: white;
     color: black;
@@ -102,7 +112,7 @@ footer {
 }
 
 .day.hasTraining {
-    box-shadow: 5px 5px 7px green !important;
+    box-shadow: 7px 7px 20px green !important;
     color: lightgreen;
 }
 
