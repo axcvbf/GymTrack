@@ -99,6 +99,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UsePathBase("/gymtrack");
 app.UseStaticFiles();
 
 
@@ -111,16 +112,6 @@ forwardedHeaderOptions.KnownNetworks.Clear();
 forwardedHeaderOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedHeaderOptions);
 app.UseRouting();
-app.Use(async (context, next) =>
-{
-    Log.Information("Auth? {Auth}, User: {User}, Scheme: {Scheme}, Host: {Host}, PathBase: {PathBase}",
-        context.User?.Identity?.IsAuthenticated,
-        context.User?.Identity?.Name ?? "null",
-        context.Request.Scheme,
-        context.Request.Host,
-        context.Request.PathBase);
-    await next();
-});
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -101,14 +101,15 @@ footer {
     }
 
     .days div:hover {
-         box-shadow: 7px 7px 20px red;
-         color: red;
+         box-shadow: none;
+         color: lightgrey;
+         transform: scale(0.95);
     }
 
 .day.today {
     background-color: white;
     color: black;
-    box-shadow: 7px 7px 20px red;
+    box-shadow: 7px 7px 20px black;
 }
 
 .day.hasTraining {
