@@ -62,8 +62,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/gymtrack/account/login";
-    options.AccessDeniedPath = "/gymtrack/account/accessdenied";
+    options.LoginPath = "/account/login";
+    options.AccessDeniedPath = "/account/accessdenied";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.None;
 });
