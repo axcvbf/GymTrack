@@ -8,7 +8,7 @@
 </div>
 
 <div id="trainingContainer">
-    <form id="exerciseForm" method="post" action="/Training/Index">
+    <form id="exerciseForm" method="post" asp-controller="Training" asp-action="Index">
             <input type="hidden" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
 
             @Html.Label("Category")
