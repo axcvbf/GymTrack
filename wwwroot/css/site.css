@@ -70,6 +70,7 @@ footer {
     background-color: #000000;
     color: white;
     bottom: 0;
+    z-index: 1000;
 }
 
 .calendar {
@@ -190,7 +191,7 @@ footer {
     display: flex;
     justify-content: space-between;
     border-bottom:solid 1px;
-    box-shadow: 1px 2px 4px lightgreen;
+    box-shadow: 1px 2px 4px dodgerblue;
 }
 
 .removeButton{
