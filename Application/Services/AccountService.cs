@@ -68,8 +68,6 @@ namespace GymTrack.Application.Services
                 {
                     Email = email,
                     UserName = email,
-                    FirstName = "N-U-L-L",
-                    LastName = "N-U-L-L"
                 };
                 var result = await _userManager.CreateAsync(user, password);
 

@@ -22,6 +22,11 @@ namespace GymTrack.Controllers
         {
             if (!ModelState.IsValid)
             {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"MODELSTATE ERROR: {error.ErrorMessage}");
+                }
+
                 return View();
             }
             var result = await _accountService.LoginAsync(model.Email, model.Password, model.RememberMe);
@@ -41,6 +46,11 @@ namespace GymTrack.Controllers
         {
             if (!ModelState.IsValid)
             {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"MODELSTATE ERROR: {error.ErrorMessage}");
+                }
+
                 return View();
             }
             var result = await _accountService.RegisterAsync(model.Email, model.Password);
