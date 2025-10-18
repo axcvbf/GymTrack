@@ -4,8 +4,6 @@ namespace GymTrack.ViewModels
 {
     public class RegisterViewModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         [Required(ErrorMessage = "Email address is required")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]

@@ -13,14 +13,6 @@ namespace GymTrack.Domain.Entities;
 
 public class GymUser : IdentityUser
 {
-    [PersonalData]
-    [MaxLength(100)]
-    public string? FirstName { get; set; }
-
-    [PersonalData]
-    [MaxLength(100)]
-    public string? LastName { get; set; }
-
     public ICollection<Training> Trainings { get; set; }
 }
 
