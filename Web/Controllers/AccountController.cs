@@ -1,5 +1,6 @@
 ﻿using GymTrack.Application.Interfaces;
 using GymTrack.Application.Services;
+using GymTrack.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,13 @@ namespace GymTrack.Controllers
         public IActionResult Login() => View();
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string email, string password, bool rememberMe)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var result = await _accountService.LoginAsync(email, password, rememberMe);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _accountService.LoginAsync(model.Email, model.Password, model.RememberMe);
 
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
@@ -32,14 +37,18 @@ namespace GymTrack.Controllers
         public IActionResult Register() => View();
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(string email, string password)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            var result = await _accountService.RegisterAsync(email, password);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _accountService.RegisterAsync(model.Email, model.Password);
 
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
