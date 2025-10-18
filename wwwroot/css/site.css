@@ -117,8 +117,8 @@ footer {
 }
 
 .day.hasTraining {
-    box-shadow: 7px 7px 20px green !important;
-    color: lightgreen;
+    box-shadow: 7px 7px 20px dodgerblue !important;
+    color: dodgerblue;
 }
 
 .empty {
