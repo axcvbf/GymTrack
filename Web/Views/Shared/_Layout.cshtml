@@ -38,7 +38,13 @@
 
     <footer class="footer">
             <div class="footer_left">&copy; 2025 - GymTrack</div>
-            <div class="footeer_right">User ID: @_userContext.GetUserId()</div>
+            @if (!string.IsNullOrEmpty(_userContext.GetUserId()))
+            {
+                <div class="footeer_right">
+                    User ID: @_userContext.GetUserId();
+                </div>
+            }
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
