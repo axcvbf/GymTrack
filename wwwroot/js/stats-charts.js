@@ -25,64 +25,71 @@ async function loadCharts(group) {
     const container = document.getElementById("graphs");
     container.innerHTML = "";
 
-    for (const id of exerciseIds) {
+    const canvases = exerciseIds.map(id => {
         const canvas = document.createElement("canvas");
         canvas.id = `chart-${id}`;
         container.appendChild(canvas);
+        return { id, canvas };
+    });
 
-        try {
-            const response = await fetch(`api/ApiStats/${id}`);
-            const data = await response.json();
+    const fetchPromises = canvases.map(({ id }) =>
+        fetch(`api/ApiStats/${id}`)
+            .then(res => res.json())
+            .then(data => ({ id, data }))
+            .catch(error => ({ id, error }))
+    );
 
-            const labels = data.map(d => d.date);
-            const values = data.map(d => d.weight);
+    const results = await Promise.all(fetchPromises);
 
-            const ctx = canvas.getContext("2d");
-            const chart = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: exerciseLabels[id],
-                        data: values,
-                        borderWidth: 2,
-                        borderColor: "black",
-                        backgroundColor: "rgba(0,0,0,0.1)",
-                        tension: 0.3,
-                        pointRadius: 2,
-                        pointBackgroundColor: "black"
-                    }]
-                },
-                options: {
-                    responsive: false,
-                    maintainAspectRatio: false,
-                    aspectRatio: 1.6,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            labels: {
-                                boxWidth: 0,
-                                color: 'black'
-                            }
+    results.forEach(({ id, data, error }) => {
+        if (error) {
+            console.error(`Error chart for ID ${id}:`, error);
+            return;
+        }
+
+        const labels = data.map(d => d.date);
+        const values = data.map(d => d.weight);
+
+        const canvas = document.getElementById(`chart-${id}`);
+        const ctx = canvas.getContext("2d");
+
+        const chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: exerciseLabels[id],
+                    data: values,
+                    borderWidth: 2,
+                    borderColor: "black",
+                    backgroundColor: "rgba(0,0,0,0.1)",
+                    tension: 0.3,
+                    pointRadius: 2,
+                    pointBackgroundColor: "black"
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                aspectRatio: 1.6,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            boxWidth: 0,
+                            color: 'black'
                         }
-                    },
-                    scales: {
-                        x: { title: { display: true, text: "Date" } },
-                        y: { title: { display: true, text: "Weight (kg)" }, beginAtZero: false }
                     }
+                },
+                scales: {
+                    x: { title: { display: true, text: "Date" } },
+                    y: { title: { display: true, text: "Weight (kg)" }, beginAtZero: false }
                 }
-            });
-
-            charts.push(chart);
-
-        }
-
-        catch (error) {
-            console.error(`Error chart ${label}:`, error);
-        }
-    }
+            }
+        });
+        charts.push(chart);
+    });
 }
-
 document.getElementById("exerciseGroup").addEventListener("change", (e) => { 
     loadCharts(e.target.value);
 })
