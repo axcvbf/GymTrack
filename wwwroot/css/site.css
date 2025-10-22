@@ -1,5 +1,5 @@
 * {
-    font-family: Georgia; !important
+    font-family: Arial; !important
 }
 
 #login-submit, #registerSubmit, .nav-tabs, .navbar-brand, .nav-link, nav-item, button {
@@ -200,4 +200,11 @@ footer {
 
 #categorySelect, #exerciseSelect, #weightInput, #repsInput {
     margin-bottom: 10px;
+}
+
+.userStats {
+    margin-top: 50px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
